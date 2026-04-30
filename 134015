@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedYemen - منصتك الطبية الشاملة</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', Tahoma, sans-serif; }
+  body { background: #f5f7fa; color: #1a1a1a; direction: rtl; text-align: right; }
+  header { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; }
+  header h1 { font-size: 26px; margin-bottom: 5px; }
+ .login-btn { position: absolute; top: 20px; left: 20px; background: white; color: #0ea5e9; padding: 8px 16px; border-radius: 8px; cursor: pointer; border: none; font-weight: 600; }
+ .container { max-width: 1400px; margin: 30px auto; padding: 0 15px; }
+ .tabs { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
+ .tab { padding: 12px 24px; background: white; border-radius: 12px; cursor: pointer; border: 2px solid #e2e8f0; white-space: nowrap; font-weight: 600; transition: 0.3s; }
+ .tab.active { background: #0ea5e9; color: white; border-color: #0ea5e9; }
+ .tab-content { display: none; }
+ .tab-content.active { display: block; }
+ .search-box { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 25px; }
+ .search-box input,.search-box select,.search-box textarea { width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none; margin-bottom: 12px; }
+ .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+ .card { background: white; padding: 22px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
+ .card h3 { color: #0284c7; margin-bottom: 15px; font-size: 18px; }
+  #map { height: 500px; border-radius: 12px; margin-top: 15px; }
+ .btn { background: #0ea5e9; color: white; padding: 12px 24px; border: none; border-radius: 10px; cursor: pointer; font-size: 15px; margin-top: 12px; transition: 0.3s; }
+ .btn:hover { background: #0284c7; }
+ .btn-success { background: #10b981; }
+ .btn-danger { background: #dc2626; }
+ .btn-warning { background: #f59e0b; }
+ .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+ .filter-btn { padding: 8px 14px; background: #e2e8f0; border-radius: 8px; cursor: pointer; border: none; font-size: 13px; transition: 0.3s; }
+ .filter-btn.active { background: #0ea5e9; color: white; }
+ .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 15px; }
+ .modal-content { background: white; padding: 30px; border-radius: 16px; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; }
+ .facility-tag { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; margin-left: 6px; color: white; font-weight: 600; }
+ .tag-hospital { background: #dc2626; }
+ .tag-clinic { background: #059669; }
+ .tag-medical { background: #0ea5e9; }
+ .tag-surgery { background: #7c2d12; }
+ .tag-diagnostic { background: #a855f7; }
+ .tag-lab { background: #ea580c; }
+ .tag-pharmacy { background: #7c3aed; }
+ .tag-blood { background: #e11d48; }
+ .status-pending { background: #f59e0b; color: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; }
+ .status-replied { background: #10b981; color: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; }
+ .status-available { background: #10b981; color: white; padding: 4px 10px; border-radius: 6px; font-size: 12px; }
+ .consultation-card { background: #f8fafc; padding: 18px; border-radius: 12px; margin-bottom: 15px; border-right: 4px solid #0ea5e9; }
+ .doctor-card { background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 15px; border-right: 4px solid #0ea5e9; }
+ .blood-card { background: #fef2f2; padding: 15px; border-radius: 12px; margin-bottom: 15px; border-right: 4px solid #e11d48; }
+ .doctor-info { display: flex; align-items: center; gap: 15px; }
+ .doctor-card img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+ .reply-box { background: #ecfdf5; padding: 15px; border-radius: 10px; margin-top: 10px; border-right: 4px solid #10b981; }
+ .loading { text-align: center; color: #64748b; padding: 40px; font-size: 16px; }
+ .stats { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+ .stat-box { background: #f1f5f9; padding: 10px 15px; border-radius: 10px; font-size: 13px; }
+ .success-msg { background: #ecfdf5; padding: 15px; border-radius: 10px; margin-top: 10px; border-right: 4px solid #10b981; display: none; }
+ .auth-box { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+  footer { text-align: center; padding: 25px; color: #64748b; font-size: 13px; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌐 MedYemen</h1>
+  <p>منصتك الطبية الشاملة - منشآت + حجز + استشارات + بنوك الدم</p>
+  <button class="login-btn" id="loginBtn" onclick="showDoctorLogin()">👨‍⚕️ دخول الأطباء</button>
+</header>
+
+<div class="container">
+  <!-- Tabs -->
+  <div class="tabs" id="mainTabs">
+    <div class="tab active" onclick="switchTab('facilities')">🏥 المنشآت الطبية</div>
+    <div class="tab" onclick="switchTab('doctors')">👨‍⚕️ استشارات دولية</div>
+    <div class="tab" onclick="switchTab('blood')">🩸 بنوك الدم</div>
+    <div class="tab" onclick="switchTab('medicine')">💊 الأدوية</div>
+  </div>
+
+  <!-- Doctor Dashboard Tabs -->
+  <div class="tabs" id="doctorTabs" style="display:none;">
+    <div class="tab active" onclick="switchTab('dashboard')">📊 لوحة التحكم</div>
+    <div class="tab" onclick="switchTab('consultations')">📝 الاستشارات الواردة</div>
+    <div class="tab" onclick="switchTab('bookings')">📅 الحجوزات</div>
+    <button class="btn btn-danger" style="margin-right:auto;" onclick="doctorLogout()">تسجيل خروج</button>
+  </div>
+
+  <!-- Tab 1: Facilities -->
+  <div id="facilities" class="tab-content active">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="ابحث عن مستشفى، عيادة، صيدلية، مختبر..." onkeyup="filterFacilities()">
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>🗺️ الخريطة التفاعلية</h3>
+        <div class="stats" id="statsBar"></div>
+        <div class="filter-bar" id="typeFilter"></div>
+        <div class="filter-bar" id="govFilter"></div>
+        <div id="map"></div>
+        <p style="margin-top:10px; font-size:13px; color:#64748b;">عدد المنشآت الظاهرة: <span id="facilityCount">0</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 2: International Doctors -->
+  <div id="doctors" class="tab-content">
+    <div class="search-box">
+      <input type="text" id="doctorSearch" placeholder="ابحث عن تخصص... مثل: قلب، عيون، أطفال" onkeyup="filterDoctors()">
+    </div>
+    <div class="grid" id="doctorsGrid"></div>
+
+    <div class="card" style="margin-top: 30px;">
+      <h3>📝 طلب استشارة طبية</h3>
+      <input type="text" id="consultName" placeholder="اسمك الكامل">
+      <select id="consultSpecialty">
+        <option value="">اختر التخصص</option>
+        <option value="cardiology">أمراض القلب</option>
+        <option value="pediatrics">طب الأطفال</option>
+        <option value="dermatology">الأمراض الجلدية</option>
+        <option value="orthopedics">العظام والمفاصل</option>
+        <option value="neurology">الأعصاب</option>
+      </select>
+      <textarea id="consultMsg" rows="5" placeholder="اشرح حالتك بالتفصيل..."></textarea>
+      <input type="file" id="consultFile" accept="image/*">
+      <button class="btn btn-success" onclick="sendConsultation()">إرسال الاستشارة</button>
+      <div class="success-msg" id="consultSuccess">✅ تم إرسال الاستشارة بنجاح! سيرد عليك طبيب دولي خلال 24-48 ساعة</div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Blood Banks & Donors -->
+  <div id="blood" class="tab-content">
+    <div class="search-box">
+      <select id="bloodTypeFilter" onchange="filterBloodBanks()">
+        <option value="all">كل فصائل الدم</option>
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+      </select>
+      <select id="bloodGovFilter" onchange="filterBloodBanks()">
+        <option value="all">كل المحافظات</option>
+      </select>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>🩸 بنوك الدم المتاحة</h3>
+        <div id="bloodBanksList"><div class="loading">جاري التحميل...</div></div>
+      </div>
+
+      <div class="card">
+        <h3>👤 التسجيل كمتبرع بالدم</h3>
+        <input type="text" id="donorName" placeholder="الاسم الكامل">
+        <select id="donorBloodType">
+          <option value="">اختر فصيلة الدم</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+        <input type="tel" id="donorPhone" placeholder="رقم الجوال - 77xxxxxxx">
+        <select id="donorGovernorate">
+          <option value="">اختر المحافظة</option>
+          <option value="عدن">عدن</option>
+          <option value="صنعاء">صنعاء</option>
+          <option value="تعز">تعز</option>
+          <option value="حضرموت">حضرموت</option>
+          <option value="الحديدة">الحديدة</option>
+        </select>
+        <button class="btn btn-danger" onclick="registerDonor()">💉 تسجيل كمتبرع</button>
+        <div class="success-msg" id="donorSuccess">✅ تم تسجيلك كمتبرع بنجاح! سيتم التواصل معك عند الحاجة</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Medicine -->
+  <div id="medicine" class="tab-content">
+    <div class="card">
+      <h3>💊 البحث عن الأدوية</h3>
+      <input type="text" id="medicineInput" placeholder="اكتب اسم الدواء... مثل: بندول">
+      <button class="btn" onclick="searchMedicine()">بحث عن السعر والبدائل</button>
+      <div class="success-msg" id="medicineResult"></div>
+    </div>
+  </div>
+
+  <!-- Tab 5: Doctor Dashboard -->
+  <div id="dashboard" class="tab-content">
+    <div class="grid">
+      <div class="card">
+        <h3>📊 إحصائيات سريعة</h3>
+        <div id="doctorStats"></div>
+      </div>
+      <div class="card">
+        <h3>📝 آخر الاستشارات</h3>
+        <div id="latestConsultations"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 6: Consultations Management -->
+  <div id="consultations" class="tab-content">
+    <div class="card">
+      <h3>📝 الاستشارات الواردة</h3>
+      <div id="consultationsList"><div class="loading">جاري التحميل...</div></div>
+    </div>
+  </div>
+
+  <!-- Tab 7: Bookings Management -->
+  <div id="bookings" class="tab-content">
+    <div class="card">
+      <h3>📅 الحجوزات الواردة</h3>
+      <div id="bookingsList"><div class="loading">جاري التحميل...</div></div>
+    </div>
+  </div>
+
+  <footer>© 2026 MedYemen | بيانات حقيقية عبر Firebase</footer>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal" id="bookingModal">
+  <div class="modal-content">
+    <h3 id="bookingTitle">حجز موعد</h3>
+    <input type="text" id="bookingName" placeholder="الاسم الكامل">
+    <input type="tel" id="bookingPhone" placeholder="رقم الجوال - 77xxxxxxx">
+    <input type="text" id="bookingReason" placeholder="سبب الزيارة / التخصص المطلوب">
+    <input type="date" id="bookingDate">
+    <input type="time" id="bookingTime">
+    <textarea id="bookingNotes" rows="3" placeholder="ملاحظات إضافية - اختياري"></textarea>
+    <button class="btn btn-success" onclick="confirmBooking()">✅ تأكيد الحجز</button>
+    <button class="btn btn-danger" onclick="closeBooking()">❌ إلغاء</button>
+  </div>
+</div>
+
+<!-- Doctor Login Modal -->
+<div class="modal" id="loginModal">
+  <div class="auth-box">
+    <h3>👨‍⚕️ دخول لوحة الأطباء</h3>
+    <input type="email" id="doctorEmail" placeholder="البريد الإلكتروني">
+    <input type="password" id="doctorPassword" placeholder="كلمة المرور">
+    <button class="btn btn-success" onclick="doctorLogin()">دخول</button>
+    <button class="btn btn-danger" onclick="closeLogin()">إلغاء</button>
+    <p style="margin-top:15px; font-size:13px; color:#64748b;">* للحساب التجريبي: doctor@medyemen.com / 123456</p>
+  </div>
+</div>
+
+<!-- Reply Consultation Modal -->
+<div class="modal" id="replyModal">
+  <div class="modal-content">
+    <h3 id="replyTitle">الرد على الاستشارة</h3>
+    <div id="consultationDetails" style="background:#f1f5f9; padding:15px; border-radius:10px; margin-bottom:15px;"></div>
+    <textarea id="replyMessage" rows="6" placeholder="اكتب ردك الطبي هنا..."></textarea>
+    <button class="btn btn-success" onclick="submitReply()">📤 إرسال الرد</button>
+    <button class="btn btn-danger" onclick="closeReply()">إلغاء</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script type="module">
+  // استيراد Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, getDocs, addDoc, query, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  // ✅ مفتاح Firebase حقك
+  const firebaseConfig = {
+    apiKey: "AIzaSyBldrjrIjohy9anTU3johy9anTU3johy9",
+    authDomain: "medyemen-1ae94.firebaseapp.com",
+    projectId: "medyemen-1ae94",
+    storageBucket: "medyemen-1ae94.appspot.com",
+    messagingSenderId: "70361833868",
+    appId: "1:70361833868:web:..."
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  // متغيرات عامة
+  var map = L.map('map').setView([15.5527, 48.5164], 6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  var markers = [];
+  var currentFacility = null;
+  var allFacilities = [];
+  var allDoctors = [];
+  var allBloodBanks = [];
+  var allDonors = [];
+  var currentDoctor = null;
+
+  // 8 أنواع منشآت + بنك الدم
+  const facilityTypes = {
+    hospital: { name: "مستشفى", icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png', color: "tag-hospital" },
+    clinic: { name: "عيادة تخصصية", icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png', color: "tag-clinic" },
+    medical: { name: "مركز طبي", icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png', color: "tag-medical" },
+    surgery: { name: "مركز جراحي", icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-black.png', color: "tag-surgery" },
+    diagnostic: { name: "مركز تشخيصي", icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-purple.png', color: "tag-diagnostic" },
+    lab: { name: "مختبر", icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png', color: "tag-lab" },
+    pharmacy: { name: "صيدلية", icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png', color: "tag-pharmacy" },
+    blood: { name: "بنك دم", icon: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png', color: "tag-blood" }
+  };
+
+  // أطباء دوليين تجريبيين
+  const doctors = [
+    {id: 1, name: "د. أحمد محمد", specialty: "cardiology", specialtyName: "أمراض القلب", country: "مصر", experience: "15 سنة", rating: 4.8, image: "https://randomuser.me/api/portraits/men/32.jpg"},
+    {id: 2, name: "د. سارة علي", specialty: "pediatrics", specialtyName: "طب الأطفال", country: "الأردن", experience: "12 سنة", rating: 4.9, image: "https://randomuser.me/api/portraits/women/44.jpg"},
+    {id: 3, name: "د. محمد خالد", specialty: "dermatology", specialtyName: "الأمراض الجلدية", country: "تركيا", experience: "10 سنوات", rating: 4.7, image: "https://randomuser.me/api/portraits/men/55.jpg"},
+    {id: 4, name: "د. فاطمة الزهراء", specialty: "orthopedics", specialtyName: "العظام والمفاصل", country: "المغرب", experience: "18 سنة", rating: 4.9, image: "https://randomuser.me/api/portraits/women/68.jpg"}
+  ];
+
+  const medicines = {
+    "بندول": {price: "2500 ريال", alternatives: "باراسيتامول، أدول", availability: "متوفر في 12 صيدلية"},
+    "اموكسيل": {price: "4200 ريال", alternatives: "أموكسيسيلين، أوجمنتين", availability: "متوفر في 8 صيدليات"},
+    "فولتارين": {price: "3800 ريال", alternatives: "ديكلوفيناك، كتافلام", availability: "متوفر في 10 صيدليات"}
+  };
+
+  // تبديل التبويبات
+  window.switchTab = function(tabName) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById(tabName).classList.add('active');
+    if(tabName === 'consultations') loadConsultations();
+    if(tabName === 'bookings') loadBookings();
+    if(tabName === 'dashboard') loadDoctorDashboard();
+    if(tabName === 'blood') loadBloodData();
+  }
+
+  // ===== نظام بنوك الدم والمتبرعين =====
+  async function loadBloodData() {
+    try {
+      // جلب بنوك الدم
+      const bloodQuery = query(collection(db, "bloodBanks"), orderBy("name"));
+      const bloodSnap = await getDocs(bloodQuery);
+      allBloodBanks = [];
+      bloodSnap.forEach((doc) => {
+        allBloodBanks.push({id: doc.id,...doc.data()});
+      });
+
+      // جلب المتبرعين
+      const donorQuery = query(collection(db, "donors"), orderBy("createdAt", "desc"));
+      const donorSnap = await getDocs(donorQuery);
+      allDonors = [];
+      donorSnap.forEach((doc) => {
+        allDonors.push({id: doc.id,...doc.data()});
+      });
+
+      createBloodFilters();
+      displayBloodBanks();
+    } catch (error) {
+      document.getElementById('bloodBanksList').innerHTML = '<p class="loading">❌ تعذر تحميل بيانات بنوك الدم</p>';
+    }
+  }
+
+  function createBloodFilters() {
+    let governors = [...new Set(allBloodBanks.map(b => b.governorate))].sort();
+    let govSelect = document.getElementById('bloodGovFilter');
+    governors.forEach(gov => {
+      let option = document.createElement('option');
+      option.value = gov;
+      option.textContent = gov;
+      govSelect.appendChild(option);
+    });
+  }
+
+  function displayBloodBanks(bloodType = "all", governorate = "all") {
+    let filtered = allBloodBanks.filter(b => {
+      let typeMatch = bloodType === "all" || b.bloodTypes?.includes(bloodType);
+      let govMatch = governorate === "all" || b.governorate === governorate;
+      return typeMatch && govMatch;
+    });
+
+    const container = document.getElementById('bloodBanksList');
+    container.innerHTML = '';
+
+    if(filtered.length === 0) {
+      container.innerHTML = '<p style="text-align:center; color:#64748b;">لا توجد بنوك دم متاحة حالياً</p>';
+      return;
+    }
+
+    filtered.forEach(bank => {
+      container.innerHTML += `
+        <div class="blood-card">
+          <h4>🏥 ${bank.name}</h4>
+          <p>📍 ${bank.governorate} - ${bank.address || ''}</p>
+          <p>📞 ${bank.phone || 'غير متوفر'}</p>
+          <p>🩸 الفصائل المتاحة: <b>${bank.bloodTypes?.join(', ') || 'غير محدد'}</b></p>
+          <span class="status-${bank.status === 'available'? 'available' : 'pending'}">
+            ${bank.status === 'available'? 'متاح الآن' : 'غير متاح'}
+          </span>
+        </div>
+      `;
+    });
+  }
+
+  window.filterBloodBanks = function() {
+    const bloodType = document.getElementById('bloodTypeFilter').value;
+    const governorate = document.getElementById('bloodGovFilter').value;
+    displayBloodBanks(bloodType, governorate);
+  }
+
+  window.registerDonor = async function() {
+    let name = document.getElementById('donorName').value.trim();
+    let bloodType = document.getElementById('donorBloodType').value;
+    let phone = document.getElementById('donorPhone').value.trim();
+    let governorate = document.getElementById('donorGovernorate').value;
+
+    if(!name ||!bloodType ||!phone ||!governorate) {
+      alert("⚠️ يرجى ملء جميع الحقول المطلوبة");
+      return;
+    }
+    if(!/^7[0-9]{8}$/.test(phone)) {
+      alert("⚠️ رقم الجوال غير صحيح. يجب أن يبدأ بـ 77 ويتكون من 9 أرقام");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "donors"), {
+        name: name,
+        bloodType: bloodType,
+        phone: phone,
+        governorate: governorate,
+        status: "available",
+        createdAt: new Date()
+      });
+      document.getElementById('donorSuccess').style.display = "block";
+      setTimeout(() => document.getElementById('donorSuccess').style.display = "none", 5000);
+      document.getElementById('donorName').value = "";
+      document.getElementById('donorPhone').value = "";
+    } catch (e) {
+      alert("❌ حدث خطأ في التسجيل");
+    }
+  }
+
+  // ===== نظام دخول الأطباء =====
+  window.showDoctorLogin = function() {
+    document.getElementById('loginModal').style.display = 'flex';
+  }
+
+  window.closeLogin = function() {
+    document.getElementById('loginModal').style.display = 'none';
+  }
+
+  window.doctorLogin = async function() {
+    const email = document.getElementById('doctorEmail').value;
+    const password = document.getElementById('doctorPassword').value;
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      currentDoctor = userCredential.user;
+      document.getElementById('loginModal').style.display = 'none';
+      document.getElementById('mainTabs').style.display = 'none';
+      document.getElementById('doctorTabs').style.display = 'flex';
+      document.getElementById('loginBtn').textContent = `مرحباً د. ${email.split('@')[0]}`;
+      switchTab('dashboard');
+      loadDoctorDashboard();
+    } catch (error) {
+      alert("❌ بيانات الدخول غير صحيحة. للحساب التجريبي: doctor@medyemen.com / 123456");
+    }
+  }
+
+  window.doctorLogout = async function() {
+    await signOut(auth);
+    currentDoctor = null;
+    document.getElementById('mainTabs').style.display = 'flex';
+    document.getElementById('doctorTabs').style.display = 'none';
+    document.getElementById('loginBtn').textContent = '👨‍⚕️ دخول الأطباء';
+    switchTab('facilities');
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      currentDoctor = user;
+      document.getElementById('mainTabs').style.display = 'none';
+      document.getElementById('doctorTabs').style.display = 'flex';
+      document.getElementById('loginBtn').textContent = `مرحباً د. ${user.email.split('@')[0]}`;
+    }
+  });
+
+  // ===== جلب المنشآت من Firebase =====
+  async function loadFacilities() {
+    document.getElementById('map').innerHTML = '<div class="loading">⏳ جاري تحميل المنشآت الطبية...</div>';
+    try {
+      const q = query(collection(db, "facilities"), orderBy("name"));
+      const querySnapshot = await getDocs(q);
+      allFacilities = [];
+      querySnapshot.forEach((doc) => {
+        allFacilities.push({id: doc.id,...doc.data()});
+      });
+      updateStats();
+      createFilters();
+      displayFacilities();
+    } catch (error) {
+      document.getElementById('map').innerHTML = '<div class="loading">❌ تعذر تحميل البيانات. تأكد من ضبط Firebase Rules</div>';
+    }
+  }
+
+  function displayFacilities(typeFilter = "all", govFilter = "all") {
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+    let filtered = allFacilities.filter(f => {
+      let typeMatch = typeFilter === "all" || f.type === typeFilter;
+      let govMatch = govFilter === "all" || f.governorate === govFilter;
+      let searchMatch = f.name.toLowerCase().includes(document.getElementById('searchInput').value.toLowerCase());
+      return typeMatch && govMatch && searchMatch;
+    });
+
+    filtered.forEach(f => {
+      const typeInfo = facilityTypes[f.type] || facilityTypes.hospital;
+      let marker = L.marker([f.lat, f.lng], {
+        icon: L.icon({iconUrl: typeInfo.icon, iconSize: [30, 45], iconAnchor: [15, 45]})
+      }).addTo(map);
+      marker.bindPopup(`
+        <div style="min-width: 200px;">
+          <b style="font-size: 16px;">${f.name}</b><br>
+          <span class="facility-tag ${typeInfo.color}">${typeInfo.name}</span><br>
+          📍 ${f.governorate}<br>
+          📞 ${f.phone || 'غير متوفر'}<br>
+          ${f.address? `🏠 ${f.address}<br>` : ''}
+          <button onclick="openBooking('${f.id}', '${f.name}')" class="btn" style="margin-top:10px; width: 100%; padding:10px;">احجز موعد الآن</button>
+        </div>
+      `);
+      markers.push(marker);
+    });
+    document.getElementById('facilityCount').textContent = filtered.length;
+    if(filtered.length > 0) {
+      const group = new L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.1));
+    }
+  }
+
+  function createFilters() {
+    let typeContainer = document.getElementById('typeFilter');
+    typeContainer.innerHTML = '';
+    let allBtn = document.createElement('button');
+    allBtn.className = 'filter-btn active';
+    allBtn.textContent = 'الكل';
+    allBtn.onclick = () => filterByType('all');
+    typeContainer.appendChild(allBtn);
+    Object.keys(facilityTypes).forEach(type => {
+      let btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.textContent = facilityTypes[type].name;
+      btn.onclick = () => filterByType(type);
+      typeContainer.appendChild(btn);
+    });
+
+    let governors = [...new Set(allFacilities.map(f => f.governorate))].sort();
+    let govContainer = document.getElementById('govFilter');
+    govContainer.innerHTML = '';
+    let allGovBtn = document.createElement('button');
+    allGovBtn.className = 'filter-btn active';
+    allGovBtn.textContent = 'كل المحافظات';
+    allGovBtn.onclick = () => filterByGov('all');
+    govContainer.appendChild(allGovBtn);
+    governors.forEach(gov => {
+      let btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.textContent = gov;
+      btn.onclick = () => filterByGov(gov);
+      govContainer.appendChild(btn);
+    });
+  }
+
+  function filterByType(type) {
+    document.querySelectorAll('#typeFilter.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    displayFacilities(type, getActiveGov());
+  }
+
+  function filterByGov
+    function getActiveGov() {
+    const active = document.querySelector('#govFilter.filter-btn.active');
+    return active && active.textContent!== 'كل المحافظات'? active.textContent : 'all';
+  }
+
+  function updateStats() {
+    const stats = {};
+    allFacilities.forEach(f => {
+      stats[f.type] = (stats[f.type] || 0) + 1;
+    });
+    let statsHTML = '';
+    Object.keys(facilityTypes).forEach(type => {
+      if(stats[type]) {
+        statsHTML += `<div class="stat-box"><span class="facility-tag ${facilityTypes[type].color}">${facilityTypes[type].name}</span> ${stats[type]}</div>`;
+      }
+    });
+    document.getElementById('statsBar').innerHTML = statsHTML;
+  }
+
+  // ===== عرض الأطباء الدوليين =====
+  function displayDoctors() {
+    const grid = document.getElementById('doctorsGrid');
+    grid.innerHTML = '';
+    allDoctors.forEach(doctor => {
+      grid.innerHTML += `
+        <div class="doctor-card">
+          <div class="doctor-info">
+            <img src="${doctor.image}" alt="${doctor.name}">
+            <div>
+              <h4>${doctor.name}</h4>
+              <p>🏥 ${doctor.specialtyName} | 🌍 ${doctor.country}</p>
+              <p>⭐ ${doctor.rating} | 💼 ${doctor.experience}</p>
+              <button class="btn" onclick="requestDoctorConsult(${doctor.id})">طلب استشارة</button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  window.filterDoctors = function() {
+    const search = document.getElementById('doctorSearch').value.toLowerCase();
+    allDoctors = doctors.filter(d => d.specialtyName.toLowerCase().includes(search) || d.country.toLowerCase().includes(search));
+    displayDoctors();
+  }
+
+  // ===== نظام الحجز =====
+  window.openBooking = function(facilityId, facilityName) {
+    currentFacility = {id: facilityId, name: facilityName};
+    document.getElementById('bookingTitle').textContent = `حجز موعد - ${facilityName}`;
+    document.getElementById('bookingDate').min = new Date().toISOString().split('T')[0];
+    document.getElementById('bookingModal').style.display = 'flex';
+  }
+
+  window.closeBooking = function() {
+    document.getElementById('bookingModal').style.display = 'none';
+    document.getElementById('bookingName').value = "";
+    document.getElementById('bookingPhone').value = "";
+    document.getElementById('bookingReason').value = "";
+    document.getElementById('bookingDate').value = "";
+    document.getElementById('bookingTime').value = "";
+    document.getElementById('bookingNotes').value = "";
+  }
+
+  window.confirmBooking = async function() {
+    let name = document.getElementById('bookingName').value.trim();
+    let phone = document.getElementById('bookingPhone').value.trim();
+    let reason = document.getElementById('bookingReason').value.trim();
+    let date = document.getElementById('bookingDate').value;
+    let time = document.getElementById('bookingTime').value;
+    let notes = document.getElementById('bookingNotes').value.trim();
+
+    if(!name ||!phone ||!reason ||!date ||!time) {
+      alert("⚠️ يرجى ملء جميع الحقول المطلوبة");
+      return;
+    }
+    if(!/^7[0-9]{8}$/.test(phone)) {
+      alert("⚠️ رقم الجوال غير صحيح. يجب أن يبدأ بـ 77 ويتكون من 9 أرقام");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "bookings"), {
+        facilityId: currentFacility.id,
+        facilityName: currentFacility.name,
+        patientName: name,
+        phone: phone,
+        reason: reason,
+        date: date,
+        time: time,
+        notes: notes,
+        status: "pending",
+        createdAt: new Date()
+      });
+      alert(`✅ تم حجز موعدك بنجاح في ${currentFacility.name}\n📅 ${date} - ⏰ ${time}`);
+      closeBooking();
+    } catch (e) {
+      alert("❌ حدث خطأ في الحجز");
+    }
+  }
+
+  // ===== إرسال استشارة طبية =====
+  window.sendConsultation = async function() {
+    let name = document.getElementById('consultName').value.trim();
+    let specialty = document.getElementById('consultSpecialty').value;
+    let msg = document.getElementById('consultMsg').value.trim();
+    let file = document.getElementById('consultFile').files[0];
+
+    if(!name ||!specialty ||!msg) {
+      alert("⚠️ يرجى ملء الاسم والتخصص والاستشارة");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "consultations"), {
+        patientName: name,
+        specialty: specialty,
+        message: msg,
+        hasAttachment:!!file,
+        status: "pending",
+        doctorReply: "",
+        createdAt: new Date()
+      });
+      document.getElementById('consultSuccess').style.display = "block";
+      setTimeout(() => document.getElementById('consultSuccess').style.display = "none", 5000);
+      document.getElementById('consultName').value = "";
+      document.getElementById('consultMsg').value = "";
+      document.getElementById('consultFile').value = "";
+    } catch (e) {
+      alert("❌ حدث خطأ في إرسال الاستشارة");
+    }
+  }
+
+  window.requestDoctorConsult = function(doctorId) {
+    const doctor = doctors.find(d => d.id === doctorId);
+    document.getElementById('consultSpecialty').value = doctor.specialty;
+    switchTab('doctors');
+    document.getElementById('consultMsg').focus();
+    alert(`تم اختيار ${doctor.name} - ${doctor.specialtyName}\nاكتب استشارتك الآن`);
+  }
+
+  // ===== لوحة تحكم الطبيب =====
+  async function loadDoctorDashboard() {
+    const consultationsQuery = query(collection(db, "consultations"), orderBy("createdAt", "desc"));
+    const consultationsSnap = await getDocs(consultationsQuery);
+    const bookingsQuery = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
+    const bookingsSnap = await getDocs(bookingsQuery);
+
+    let pendingConsultations = 0;
+    let repliedConsultations = 0;
+    let pendingBookings = 0;
+    let consultationsHTML = '';
+
+    consultationsSnap.forEach((doc) => {
+      const data = doc.data();
+      if(data.status === 'pending') pendingConsultations++;
+      else repliedConsultations++;
+      if(consultationsHTML.split('<div').length < 6) {
+        consultationsHTML += `
+          <div class="consultation-card">
+            <b>${data.patientName}</b> - ${data.specialty}<br>
+            <p style="margin:8px 0;">${data.message.substring(0, 100)}...</p>
+            <span class="status-${data.status}">${data.status === 'pending'? 'معلق' : 'تم الرد'}</span>
+          </div>
+        `;
+      }
+    });
+
+    bookingsSnap.forEach((doc) => {
+      const data = doc.data();
+      if(data.status === 'pending') pendingBookings++;
+    });
+
+    document.getElementById('doctorStats').innerHTML = `
+      <div class="stat-box">📝 استشارات معلقة: <b>${pendingConsultations}</b></div>
+      <div class="stat-box">✅ استشارات مكتملة: <b>${repliedConsultations}</b></div>
+      <div class="stat-box">📅 حجوزات معلقة: <b>${pendingBookings}</b></div>
+    `;
+    document.getElementById('latestConsultations').innerHTML = consultationsHTML || '<p>لا توجد استشارات</p>';
+  }
+
+  async function loadConsultations() {
+    const q = query(collection(db, "consultations"), orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    const container = document.getElementById('consultationsList');
+    container.innerHTML = '';
+
+    if(querySnapshot.empty) {
+      container.innerHTML = '<p style="text-align:center; color:#64748b;">لا توجد استشارات حالياً</p>';
+      return;
+    }
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      container.innerHTML += `
+        <div class="consultation-card">
+          <b>${data.patientName}</b> - ${data.specialty}
+          <span class="status-${data.status}" style="float:left;">${data.status === 'pending'? 'معلق' : 'تم الرد'}</span>
+          <p style="margin:10px 0;">${data.message}</p>
+          ${data.doctorReply? `<div class="reply-box"><b>رد الطبيب:</b> ${data.doctorReply}</div>` : ''}
+          ${data.status === 'pending'? `<button class="btn btn-warning" onclick="openReply('${doc.id}', '${data.patientName}', \`${data.message}\`)">رد على الاستشارة</button>` : ''}
+        </div>
+      `;
+    });
+  }
+
+  async function loadBookings() {
+    const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
+    const querySnapshot = await getDocs(q);
+    const container = document.getElementById('bookingsList');
+    container.innerHTML = '';
+
+    if(querySnapshot.empty) {
+      container.innerHTML = '<p style="text-align:center; color:#64748b;">لا توجد حجوزات حالياً</p>';
+      return;
+    }
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      container.innerHTML += `
+        <div class="consultation-card">
+          <b>${data.patientName}</b> - ${data.facilityName}<br>
+          📅 ${data.date} - ⏰ ${data.time}<br>
+          📞 ${data.phone}<br>
+          📝 ${data.reason}
+          <span class="status-${data.status}" style="float:left;">${data.status === 'pending'? 'معلق' : 'مؤكد'}</span>
+        </div>
+      `;
+    });
+  }
+
+  window.openReply = function(consultationId, patientName, message) {
+    currentConsultation = consultationId;
+    document.getElementById('replyTitle').textContent = `الرد على استشارة - ${patientName}`;
+    document.getElementById('consultationDetails').textContent = message;
+    document.getElementById('replyModal').style.display = 'flex';
+  }
+
+  window.closeReply = function() {
+    document.getElementById('replyModal').style.display = 'none';
+    document.getElementById('replyMessage').value = "";
+    currentConsultation = null;
+  }
+
+  window.submitReply = async function() {
+    let reply = document.getElementById('replyMessage').value.trim();
+    if(!reply) {
+      alert("⚠️ يرجى كتابة الرد");
+      return;
+    }
+    try {
+      await updateDoc(doc(db, "consultations", currentConsultation), {
+        doctorReply: reply,
+        status: "replied",
+        repliedAt: new Date()
+      });
+      alert("✅ تم إرسال الرد بنجاح");
+      closeReply();
+      loadConsultations();
+      loadDoctorDashboard();
+    } catch (e) {
+      alert("❌ حدث خطأ في إرسال الرد");
+    }
+  }
+
+  window.searchMedicine = function() {
+    const medicineName = document.getElementById('medicineInput').value.trim();
+    const result = medicines[medicineName];
+    const resultDiv = document.getElementById('medicineResult');
+    if(result) {
+      resultDiv.innerHTML = `
+        <b>${medicineName}</b><br>
+        💰 السعر: ${result.price}<br>
+        🔄 البدائل: ${result.alternatives}<br>
+        📍 ${result.availability}
+      `;
+      resultDiv.style.display = "block";
+    } else {
+      resultDiv.innerHTML = "❌ لم يتم العثور على الدواء. جرب: بندول، اموكسيل، فولتارين";
+      resultDiv.style.display = "block";
+    }
+  }
+
+  window.filterFacilities = function() {
+    displayFacilities(getActiveType(), getActiveGov());
+  }
+
+  // تحميل البيانات عند فتح الصفحة
+  loadFacilities();
+  allDoctors = doctors;
+  displayDoctors();
+</script>
+</body>
+</html>
