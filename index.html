@@ -1,192 +1,278 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ميديمن برو - دليل صنعاء الطبي الشامل</title>
-  <meta name="description" content="احجز طبيبك في صنعاء، استشارة واتساب، طوارئ، بنوك دم، صيدليات 24 ساعة. منصة د. علي الغشمي">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediYemen Pro | الدليل الطبي اليمني</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:Tahoma,Arial,sans-serif}
-    :root{--blue:#0d47a1;--blue2:#1976d2;--green:#25D366;--red:#d32f2f;--orange:#ff9800;--bg:#f5f7fa}
-    body{background:var(--bg);color:#1a1a1a;line-height:1.7}
-    .container{max-width:1300px;margin:auto;padding:20px}
-    .header{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;padding:50px 20px;text-align:center;border-radius:0 0 25px 25px}
-    .header h1{font-size:2.5rem;margin-bottom:12px}
-    .header p{opacity:.95;font-size:1.1rem}
-    .btn{display:inline-block;background:var(--green);color:#fff;padding:13px 26px;border-radius:10px;text-decoration:none;font-weight:700;margin:6px;transition:.3s;border:none;cursor:pointer;font-size:.95rem}
-    .btn:hover{background:#128C7E;transform:translateY(-3px)}
-    .btn-blue{background:var(--blue2)}.btn-blue:hover{background:var(--blue)}
-    .btn-red{background:var(--red)}.btn-red:hover{background:#b71c1c}
-    .btn-orange{background:var(--orange)}.btn-orange:hover{background:#f57c00}
-    .btn-outline{background:transparent;border:2px solid #fff}
-    .section{margin:50px 0}
-    .section h2{color:var(--blue);margin-bottom:25px;font-size:2rem;border-right:5px solid var(--blue2);padding-right:15px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:25px}
-    .card{background:#fff;border-radius:15px;padding:25px;box-shadow:0 5px 15px rgba(0,0,0,.08);transition:.3s;border:1px solid #eee}
-    .card:hover{transform:translateY(-6px);box-shadow:0 12px 25px rgba(0,0,0,.15)}
-    .card h3{color:var(--blue2);margin-bottom:10px;font-size:1.25rem}
-    .card p{color:#555;margin-bottom:15px;font-size:.95rem}
-    .badge{display:inline-block;background:#e3f2fd;color:var(--blue);padding:5px 12px;border-radius:20px;font-size:.85rem;margin-bottom:12px;font-weight:600}
-    .badge-red{background:#ffebee;color:var(--red)}
-    .search-box{width:100%;padding:16px;border:2px solid #e0e0e0;border-radius:12px;font-size:1.1rem;margin:25px 0}
-    .search-box:focus{outline:none;border-color:var(--blue2)}
-    .join-banner{background:linear-gradient(135deg,#fff3e0,#ffe0b2);border:2px dashed #ff9800;padding:30px;border-radius:15px;text-align:center;margin:40px 0}
-    .tabs{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-    .tab{padding:10px 20px;background:#e0e0e0;border-radius:8px;cursor:pointer;font-weight:600}
-    .tab.active{background:var(--blue2);color:#fff}
-    .footer{background:var(--blue);color:#fff;text-align:center;padding:40px 20px;margin-top:70px;border-radius:25px 25px 0 0}
-    .footer a{color:#fff}
-    .stats{display:flex;justify-content:space-around;text-align:center;margin:30px 0;flex-wrap:wrap}
-    .stat h3{font-size:2rem;color:#fff}
-    .stat p{color:#e3f2fd}
-    .btn-group{display:flex;gap:8px;flex-wrap:wrap}
-    .note{background:#fff8e1;border-right:4px solid #ffc107;padding:15px;border-radius:8px;margin:20px 0;font-size:.9rem}
-    @media(max-width:768px){.header h1{font-size:1.8rem}.grid{grid-template-columns:1fr}}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }body {
+  background: #f4f7fb;
+  color: #222;
+}
+
+header {
+  background: linear-gradient(135deg, #0b7285, #2f9e44);
+  color: white;
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+header h1 {
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+header p {
+  font-size: 18px;
+  opacity: 0.95;
+}
+
+.topbar {
+  background: white;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar input {
+  width: 320px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.topbar select {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.container {
+  max-width: 1400px;
+  margin: auto;
+  padding: 30px 20px;
+}
+
+.section-title {
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: #0b7285;
+  font-weight: 800;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: 0.3s;
+  border-top: 6px solid #0b7285;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h3 {
+  margin-bottom: 12px;
+  color: #0b7285;
+  font-size: 22px;
+}
+
+.card p {
+  line-height: 1.9;
+  margin-bottom: 10px;
+  color: #555;
+  font-size: 15px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.btn {
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: white;
+  transition: 0.3s;
+  display: inline-block;
+}
+
+.visit {
+  background: #0b7285;
+}
+
+.call {
+  background: #2f9e44;
+}
+
+.map {
+  background: #e67700;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+footer {
+  margin-top: 40px;
+  background: #0b7285;
+  color: white;
+  text-align: center;
+  padding: 25px;
+}
+
+.badge {
+  display: inline-block;
+  background: #2f9e44;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+@media(max-width: 600px) {
+  header h1 {
+    font-size: 28px;
+  }
+
+  .topbar input {
+    width: 100%;
+  }
+}
+
   </style>
 </head>
-<body>
-
-  <div class="header">
-    <h1>ميديمن برو 🏥</h1>
-    <p>الدليل الطبي الشامل لصنعاء - بإشراف د. علي الغشمي</p>
-    <div class="stats">
-      <div class="stat"><h3>+80</h3><p>منشأة طبية</p></div>
-      <div class="stat"><h3>24/7</h3><p>طوارئ واستشارات</p></div>
-      <div class="stat"><h3>+2000</h3><p>مريض شهرياً</p></div>
-    </div>
-    <a href="https://wa.me/967771441367?text=السلام عليكم، أريد حجز موعد" class="btn">احجز عبر واتساب</a>
-    <a href="https://wa.me/967771441367?text=السلام عليكم د. علي%0Aأنا د. ___ تخصص ___%0Aأرغب بالانضمام%0Aرقمي: ___" class="btn btn-outline">👨‍⚕️ انضم كطبيب</a>
+<body><header>
+  <h1>🇾🇪 MediYemen Pro</h1>
+  <p>الدليل الطبي اليمني الشامل للمستشفيات والعيادات والأطباء والاستشارات الطبية</p>
+</header><div class="topbar">
+  <input type="text" id="searchInput" placeholder="ابحث عن مستشفى أو طبيب أو خدمة...">  <select id="filterCategory">
+    <option value="all">جميع التصنيفات</option>
+    <option value="مستشفى">مستشفيات</option>
+    <option value="مختبر">مختبرات</option>
+    <option value="صيدلية">صيدليات</option>
+    <option value="استشارة">استشارات عن بعد</option>
+  </select>
+</div><div class="container">  <h2 class="section-title">🏥 الدليل الطبي</h2>  <div class="grid" id="medicalGrid"><div class="card" data-category="مستشفى">
+  <span class="badge">مستشفى</span>
+  <h3>مستشفى الثورة العام</h3>
+  <p>صنعاء - خدمات طبية متكاملة - طوارئ - عناية مركزة - عمليات.</p>
+  <p>📞 01-252224</p>
+  <div class="buttons">
+    <a href="https://maps.google.com" target="_blank" class="btn map">الموقع</a>
+    <a href="tel:01252224" class="btn call">اتصال</a>
   </div>
+</div>
 
-  <div class="container">
+<div class="card" data-category="مختبر">
+  <span class="badge">مختبر</span>
+  <h3>مختبرات العولقي</h3>
+  <p>فحوصات طبية متقدمة وتحاليل شاملة بأحدث الأجهزة.</p>
+  <p>📞 771441367</p>
+  <div class="buttons">
+    <a href="https://maps.google.com" target="_blank" class="btn map">الموقع</a>
+    <a href="tel:771441367" class="btn call">اتصال</a>
+  </div>
+</div>
 
-    <input type="text" id="search" class="search-box" placeholder="ابحث عن طبيب، مستشفى، صيدلية، بنك دم...">
+<div class="card" data-category="صيدلية">
+  <span class="badge">صيدلية</span>
+  <h3>صيدلية الشفاء</h3>
+  <p>خدمة توصيل أدوية - أدوية مستوردة ومحلية.</p>
+  <p>📞 777777777</p>
+  <div class="buttons">
+    <a href="https://drugs.com" target="_blank" class="btn visit">الأدوية</a>
+    <a href="tel:777777777" class="btn call">اتصال</a>
+  </div>
+</div>
 
-    <div class="tabs">
-      <div class="tab active" onclick="showTab('clinics')">عيادات ومستشفيات</div>
-      <div class="tab" onclick="showTab('remote')">استشارة عن بعد</div>
-      <div class="tab" onclick="showTab('blood')">بنوك الدم</div>
-      <div class="tab" onclick="showTab('pharmacy')">صيدليات 24س</div>
-      <div class="tab" onclick="showTab('articles')">مقالات طبية</div>
-    </div>
+<div class="card" data-category="استشارة">
+  <span class="badge">استشارة عن بعد</span>
+  <h3>منصة الطبي</h3>
+  <p>استشارات طبية مباشرة مع أطباء متخصصين 24/7.</p>
+  <div class="buttons">
+    <a href="https://altibbi.com" target="_blank" class="btn visit">فتح المنصة</a>
+  </div>
+</div>
 
-    <div class="section" id="clinics-section">
-      <h2>عيادات ومستشفيات صنعاء - حكومي وخاص</h2>
-      <div class="grid" id="clinics"></div>
-    </div>
+<div class="card" data-category="استشارة">
+  <span class="badge">استشارة عالمية</span>
+  <h3>Teladoc</h3>
+  <p>استشارات طبية دولية عبر الإنترنت.</p>
+  <div class="buttons">
+    <a href="https://www.teladoc.com" target="_blank" class="btn visit">زيارة الموقع</a>
+  </div>
+</div>
 
-    <div class="section" id="remote-section" style="display:none">
-      <h2>استشارة عن بعد واتساب - طوارئ 24 ساعة</h2>
-      <div class="note">⚠️ تنبيه: أرقام الطوارئ للاستفسارات العاجلة فقط. في الحالات الخطيرة توجه لأقرب طوارئ فوراً.</div>
-      <div class="grid" id="remote"></div>
-    </div>
-
-    <div class="section" id="blood-section" style="display:none">
-      <h2>بنوك الدم في صنعاء - تبرع وأنقذ حياة</h2>
-      <div class="grid" id="blood"></div>
-    </div>
-
-    <div class="section" id="pharmacy-section" style="display:none">
-      <h2>صيدليات مناوبة 24 ساعة</h2>
-      <div class="grid" id="pharmacy"></div>
-    </div>
-
-    <div class="section" id="articles-section" style="display:none">
-      <h2>مقالات طبية - د. علي الغشمي</h2>
-      <div class="grid" id="articles"></div>
-    </div>
-
-    <div class="join-banner">
-      <h3>أنت طبيب أو صاحب منشأة طبية؟ 👨‍⚕️</h3>
-      <p>انضم لمنصة ميديمن برو واوصل لآلاف المرضى في صنعاء مجاناً</p>
-      <a href="https://wa.me/967771441367?text=السلام عليكم د. علي%0Aأنا د. ___ تخصص ___%0Aأرغب بالانضمام%0Aرقمي: ___" class="btn btn-blue">سجل منشأتك الآن</a>
-    </div>
+<div class="card" data-category="مستشفى">
+  <span class="badge">مستشفى خاص</span>
+  <h3>المستشفى السعودي الألماني</h3>
+  <p>خدمات تخصصية وعيادات واستقبال طوارئ.</p>
+  <p>📞 800000000</p>
+  <div class="buttons">
+    <a href="https://maps.google.com" target="_blank" class="btn map">الموقع</a>
+    <a href="tel:800000000" class="btn call">اتصال</a>
+  </div>
+</div>
 
   </div>
+</div><footer>
+  <h3>📱 MediYemen Pro</h3>
+  <p>تطوير وإدارة: د. علي الغشمي</p>
+  <p>📞 771441367</p>
+  <p>© 2026 جميع الحقوق محفوظة</p>
+</footer><script>
+  const searchInput = document.getElementById('searchInput');
+  const filterCategory = document.getElementById('filterCategory');
+  const cards = document.querySelectorAll('.card');
 
-  <div class="footer">
-    <p><strong>ميديمن برو © 2026</strong> -بإشراف د. علي الغشمي    </p>
-    <p>صنعاء - اليمن | للإدارة والدعم: <a href="https://wa.me/967771441367">771441367</a></p>
-    <p style="font-size:.85rem;opacity:.8;margin-top:15px">تنبيه: المعلومات للاسترشاد فقط. في الحالات الطارئة توجه لأقرب طوارئ. الاستشارات لا تغني عن الكشف السريري</p>
-  </div>
+  function filterCards() {
+    const searchText = searchInput.value.toLowerCase();
+    const category = filterCategory.value;
 
-  <script>
-      {name:"مستشفى الثورة العام", spec:"حكومي - جميع التخصصات + طوارئ 24س", area:"باب اليمن - شارع خولان", phone:"01246966", map:"https://maps.google.com/?q=Al+Thawra+Hospital+Sanaa"}, 
-      {name:"المستشفى الجمهوري التعليمي", spec:"حكومي مجاني - تعليمي + عمليات كبرى", area:"ميدان التحرير - الزبيري", phone:"781695995", map:"https://maps.google.com/?q=Republican+Hospital+Sanaa"}, 
-      {name:"المستشفى السعودي الألماني", spec:"خاص - 5 نجوم + عناية مركزة", area:"الستين الشمالي - جولة الجمنة", phone:"01313333", map:"https://maps.google.com/?q=Saudi+German+Hospital+Sanaa"}, 
-      {name:"مستشفى جامعة العلوم والتكنولوجيا", spec:"خاص - تعليمي + جميع التخصصات", area:"الستين الغربي - مقابل جامعة صنعاء", phone:"01500000", map:"https://maps.google.com/?q=University+of+Science+and+Technology+Hospital+Sanaa"}, 
-    ];
+    cards.forEach(card => {
+      const text = card.innerText.toLowerCase();
+      const cardCategory = card.getAttribute('data-category');
 
-    const remoteDoctors = [
-      {name:"طوارئ المستشفى الجمهوري", spec:"استقبال الحالات الحرجة 24/7", phone:"781695995"}, 
-      {name:"طوارئ مستشفى الثورة", spec:"حوادث + عناية قلبية + سموم", phone:"01246966"}, 
-      {name:"السعودي الألماني - الخط المجاني", spec:"استشارات هاتفية للحالات العاجلة", phone:"8000018"}, 
-      {name:"طوارئ مستشفى العلوم والتكنولوجيا", spec:"طبيب مناوب للاستشارات", phone:"01500000"}, 
-      {name:"د. علي الغشمي - استشارة خاصة", spec:"جراحة عامة ومناظير وسمنة", phone:"771441367"},
-    ];
+      const matchesSearch = text.includes(searchText);
+      const matchesCategory = category === 'all' || cardCategory === category;
 
-    const bloodBanks = [
-      {name:"المركز الوطني لنقل الدم وأبحاثه", spec:"المركز الرئيسي - شارع السبعين/مستشفى السبعين", area:"السبعين", phone:"01446946", time:"8ص - 8م", map:"https://maps.google.com/?q=National+Blood+Bank+Sanaa"}, 
-      {name:"بنك الدم - مستشفى الثورة", spec:"داخل المستشفى - باب اليمن", area:"الزبيري", phone:"01246966", time:"24 ساعة", map:"https://maps.google.com/?q=Al+Thawra+Hospital+Sanaa"},
-      {name:"بنك الدم - المستشفى الجمهوري", spec:"داخل المستشفى - ميدان التحرير", area:"التحرير", phone:"781695995", time:"24 ساعة", map:"https://maps.google.com/?q=Republican+Hospital+Sanaa"},
-    ];
-
-    const pharmacies = [
-      {name:"صيدلية ابن حيان - المركز الرئيسي", spec:"أمام المستشفى الجمهوري - شارع الزبيري", area:"الزبيري", phone:"735344414", time:"24 ساعة", map:"https://maps.google.com/?q=Ibn+Hayan+Pharmacy+Sanaa"}, 
-      {name:"صيدلية النهدي المركزية", spec:"شارع 14 أكتوبر - حدة - جوار نقابة الصيادلة", area:"حدة", phone:"778588855", time:"24 ساعة", map:"https://maps.google.com/?q=Al+Nahdi+Pharmacy+Sanaa"}, 
-      {name:"صيدلية مستشفى الثورة", spec:"داخل المستشفى - خدمة 24 ساعة", area:"باب اليمن", phone:"01246966", time:"24 ساعة", map:"https://maps.google.com/?q=Al+Thawra+Hospital+Sanaa"},
-      {name:"صيدلية السعودي الألماني", spec:"داخل المستشفى - الستين الشمالي", area:"الجراف", phone:"01313333", time:"24 ساعة", map:"https://maps.google.com/?q=Saudi+German+Hospital+Sanaa"},
-    ];
-
-    const articles = [
-      {title:"5 علامات لالتهاب الزائدة الدودية", meta:"الجراحة العامة", excerpt:"ألم يبدأ حول السرة وينتقل لليمين السفلي + غثيان + حمى. لا تتأخر، قد تنفجر.", link:"https://wa.me/967771441367?text=أريد مقال الزائدة"},
-      {title:"متى تحتاج منظار معدة؟", meta:"المناظير", excerpt:"حرقة مزمنة، صعوبة بلع، قيء دم. المنظار يشخص القرحة والجرثومة بدقة.", link:"https://wa.me/967771441367?text=معلومات منظار المعدة"},
-      {title:"تكميم المعدة: شروط ونصائح", meta:"جراحة السمنة", excerpt:"لو كتلة الجسم فوق 40. العملية بالمنظار ونزول 70% من الوزن الزائد خلال سنة.", link:"https://wa.me/967771441367?text=استشارة تكميم"},
-      {title:"الفتق الإربي: لا تهمله", meta:"توعية", excerpt:"شبكة طبية + منظار = خروج بنفس اليوم. إهماله يسبب اختناق الأمعاء.", link:"https://wa.me/967771441367?text=سؤال عن الفتق"},
-    ];
-
-    function createCard(item, type) {
-      let btns = '';
-      const waMsg = encodeURIComponent(`السلام عليكم، استفسار من ميديمن برو بخصوص ${item.name}`);
-      if(type === 'clinic' || type === 'remote'){
-        btns = `<a href="https://wa.me/967${item.phone}?text=${waMsg}" class="btn" target="_blank">واتساب</a>`;
-        if(item.map) btns += `<a href="${item.map}" class="btn btn-orange" target="_blank">الموقع</a>`;
-      } else if(type === 'blood' || type === 'pharmacy'){
-        btns = `<a href="tel:+967${item.phone}" class="btn btn-red">اتصال مباشر</a>`;
-        if(item.map) btns += `<a href="${item.map}" class="btn btn-orange" target="_blank">الموقع</a>`;
-      } else if(type === 'article'){
-        return `<div class="card"><div class="badge">${item.meta}</div><h3>${item.title}</h3><p>${item.excerpt}</p><a href="${item.link}" class="btn" target="_blank">اقرأ التفاصيل واتساب</a></div>`;
+      if (matchesSearch && matchesCategory) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
       }
-      return `<div class="card"><span class="badge ${type==='blood'?'badge-red':''}">${item.area || item.time || 'متاح 24/7'}</span><h3>${item.name}</h3><p>${item.spec || item.time}</p><div class="btn-group">${btns}</div></div>`;
-    }
-
-    function render() {
-      document.getElementById('clinics').innerHTML = clinics.map(c => createCard(c, 'clinic')).join('');
-      document.getElementById('remote').innerHTML = remoteDoctors.map(d => createCard(d, 'remote')).join('');
-      document.getElementById('blood').innerHTML = bloodBanks.map(b => createCard(b, 'blood')).join('');
-      document.getElementById('pharmacy').innerHTML = pharmacies.map(p => createCard(p, 'pharmacy')).join('');
-      document.getElementById('articles').innerHTML = articles.map(a => createCard(a, 'article')).join('');
-    }
-
-    function showTab(tab) {
-      document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.getElementById(tab+'-section').style.display = 'block';
-      event.target.classList.add('active');
-    }
-
-    document.getElementById('search').addEventListener('input', e => {
-      const val = e.target.value.toLowerCase();
-      const filter = (arr) => arr.filter(i => (i.name||'').toLowerCase().includes(val) || (i.spec||'').toLowerCase().includes(val) || (i.area||'').toLowerCase().includes(val) || (i.title||'').toLowerCase().includes(val));
-      document.getElementById('clinics').innerHTML = filter(clinics).map(c => createCard(c, 'clinic')).join('');
-      document.getElementById('remote').innerHTML = filter(remoteDoctors).map(d => createCard(d, 'remote')).join('');
-      document.getElementById('blood').innerHTML = filter(bloodBanks).map(b => createCard(b, 'blood')).join('');
-      document.getElementById('pharmacy').innerHTML = filter(pharmacies).map(p => createCard(p, 'pharmacy')).join('');
-      document.getElementById('articles').innerHTML = filter(articles).map(a => createCard(a, 'article')).join('');
     });
+  }
 
-    render();
-  </script>
-
-</body>
+  searchInput.addEventListener('keyup', filterCards);
+  filterCategory.addEventListener('change', filterCards);
+</script></body>
 </html>
