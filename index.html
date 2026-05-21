@@ -1,163 +1,207 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>MediYemen Health App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediYemen Pro | ميديمن برو</title>  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Tahoma,sans-serif}
+    body{background:#f4f9fb;color:#222}
+    header{background:linear-gradient(135deg,#0f766e,#2563eb);color:#fff;padding:22px;text-align:center}
+    header h1{font-size:28px}
+    header p{margin-top:6px}
 
-<!-- PWA META -->
-<meta name="theme-color" content="#0b5f5b" />
-<meta name="description" content="منصة طبية متكاملة جاهزة كتطبيق" />
-<link rel="manifest" href="data:application/manifest+json,{\"name\":\"MediYemen Health\",\"short_name\":\"MediYemen\",\"start_url\":\"./\",\"display\":\"standalone\",\"background_color\":\"#ffffff\",\"theme_color\":\"#0b5f5b\",\"icons\":[{\"src\":\"https://cdn-icons-png.flaticon.com/512/2966/2966327.png\",\"sizes\":\"192x192\",\"type\":\"image/png\"}]}" />
+    nav{background:#fff;padding:10px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;position:sticky;top:0;z-index:999}
+    nav a{background:#0f766e;color:#fff;padding:8px 12px;border-radius:10px;text-decoration:none;font-size:13px}
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    section{padding:28px 14px;max-width:1200px;margin:auto}
+    .title{text-align:center;color:#0f766e;margin-bottom:18px}
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
 
-<style>
-body{font-family:Arial;margin:0;background:#eef2f7;}
-header{background:#0b5f5b;color:#fff;padding:16px;text-align:center;}
-nav{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;background:#fff;padding:10px;position:sticky;top:0;z-index:10;}
-nav button{border:0;padding:8px 10px;border-radius:8px;cursor:pointer;background:#e5e7eb;font-weight:bold;}
-nav button.active{background:#0b5f5b;color:#fff;}
-.container{max-width:1100px;margin:auto;padding:14px;}
-.section{display:none;}
-.section.active{display:block;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
-.card{background:#fff;border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
-.title{font-weight:bold;margin-bottom:6px;}
-.btn{display:block;margin-top:8px;padding:8px;background:#0b5f5b;color:#fff;border-radius:8px;text-align:center;border:none;cursor:pointer;width:100%;}
-input{width:100%;padding:8px;margin:4px 0;border-radius:8px;border:1px solid #ddd;}
-#map{height:380px;border-radius:12px;margin-top:10px;}
-.footer{margin-top:20px;background:#0b5f5b;color:#fff;text-align:center;padding:14px;border-radius:12px;}
-</style>
-</head>
-<body>
+    .card{background:#fff;padding:14px;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.08)}
 
-<header>
-<h2>🏥 MediYemen Health App</h2>
-<p>تطبيق طبي جاهز للنشر (PWA → متجر لاحقًا)</p>
-</header>
+    .btn{background:#0f766e;color:#fff;padding:10px;border:none;border-radius:10px;cursor:pointer;margin-top:8px}
 
-<nav>
-<button class="active" onclick="show('home')">الرئيسية</button>
-<button onclick="show('dashboard')">لوحة التحكم</button>
-<button onclick="show('mapSection')">الخريطة</button>
-<button onclick="show('hospitals')">المستشفيات</button>
-<button onclick="show('doctors')">الأطباء</button>
-<button onclick="show('pharmacies')">الصيدليات</button>
-<button onclick="show('labs')">المختبرات</button>
-<button onclick="show('blood')">🩸 الدم</button>
-</nav>
+    input,select,textarea{width:100%;padding:10px;margin-top:6px;border-radius:10px;border:1px solid #ccc}
 
-<div class="container">
+    footer{text-align:center;padding:18px;background:#0f172a;color:#fff;margin-top:25px}
 
-<div id="home" class="section active">
-<div class="card">
-<h3>🚀 تطبيق طبي جاهز للنشر</h3>
-<p>يمكن تثبيته على الهاتف مباشرة (Add to Home Screen)</p>
-</div>
-</div>
+    #mapCanvas{height:450px;border-radius:15px}
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="section">
-<div class="grid">
-<div class="card">
-<div class="title">إضافة مستشفى</div>
-<input id="hName" placeholder="اسم">
-<input id="hLat" placeholder="lat">
-<input id="hLng" placeholder="lng">
-<button class="btn" onclick="addHospital()">إضافة</button>
-</div>
+    .warn{background:#fff3cd;padding:10px;border-radius:10px;margin-top:10px;font-size:13px}
 
-<div class="card">
-<div class="title">إضافة طبيب</div>
-<input id="dName" placeholder="اسم">
-<input id="dSpec" placeholder="تخصص">
-<button class="btn" onclick="addDoctor()">إضافة</button>
-</div>
-
-<div class="card">
-<div class="title">إضافة صيدلية</div>
-<input id="pName" placeholder="اسم">
-<button class="btn" onclick="addPharmacy()">إضافة</button>
+  </style></head><body><header>
+  <h1>🇾🇪 MediYemen Pro | ميديمن برو</h1>
+  <p>النظام الصحي الوطني الذكي المتكامل</p>
+  <p>المؤسس: د. علي زيد الغشمي | 📞 771441367</p>
+</header><nav>
+  <a href="#services">الخدمات</a>
+  <a href="#booking">الحجز</a>
+  <a href="#blood">بنك الدم</a>
+  <a href="#medicine">الأدوية</a>
+  <a href="#telemed">استشارات</a>
+  <a href="#ai">GPT طبي</a>
+  <a href="#labs">المختبرات</a>
+  <a href="#admin">لوحة التحكم</a>
+  <a href="#map-section">الخريطة</a>
+</nav><section id="services">
+  <h2 class="title">🏥 النظام الصحي المتكامل</h2>
+  <div class="grid">
+    <div class="card"><h3>المستشفيات</h3><p>دليل شامل للمنشآت الصحية</p></div>
+    <div class="card"><h3>المختبرات</h3><p>تحليل وربط النتائج بالذكاء الاصطناعي</p></div>
+    <div class="card"><h3>الصيدليات</h3><p>بحث الأدوية والأسعار</p></div>
+    <div class="card"><h3>الاستشارات العربية</h3><p>Altibbi - Vezeeta - طبي</p></div>
+  </div>
+</section><section id="booking">
+  <h2 class="title">📅 حجز موعد</h2>
+  <div class="card">
+    <input id="pname" placeholder="اسم المريض">
+    <select id="hospital">
+      <option>المستشفى الجمهوري</option>
+      <option>مستشفى الثورة</option>
+      <option>مستشفى الكويت</option>
+    </select>
+    <select id="spec">
+      <option>باطنية</option>
+      <option>أطفال</option>
+      <option>جراحة</option>
+      <option>نساء وولادة</option>
+    </select>
+    <input type="date" id="date">
+    <input type="time" id="time">
+    <button class="btn" onclick="book()">تأكيد الحجز</button>
+  </div>
+</section><section id="blood">
+  <h2 class="title">🩸 بنك الدم</h2>
+  <div class="grid"><div class="card">
+  <h3>تسجيل متبرع</h3>
+  <input id="dname" placeholder="الاسم">
+  <select id="dtype"><option>A+</option><option>B+</option><option>O+</option><option>AB+</option></select>
+  <input id="dphone" placeholder="رقم الهاتف">
+  <button class="btn" onclick="addDonor()">تسجيل</button>
 </div>
 
 <div class="card">
-<div class="title">إضافة مختبر</div>
-<input id="lName" placeholder="اسم">
-<button class="btn" onclick="addLab()">إضافة</button>
+  <h3>طلب دم عاجل</h3>
+  <select id="need"><option>A+</option><option>B+</option><option>O+</option><option>AB+</option></select>
+  <button class="btn" onclick="requestBlood()">إرسال</button>
 </div>
 
-<div class="card">
-<div class="title">بنك دم</div>
-<input id="bName" placeholder="اسم">
-<input id="bType" placeholder="فصائل">
-<button class="btn" onclick="addBlood()">إضافة</button>
-</div>
-</div>
-</div>
+  </div>
+</section><section id="medicine">
+  <h2 class="title">💊 الأدوية</h2>
+  <div class="card">
+    <input id="med" placeholder="اسم الدواء">
+    <button class="btn" onclick="searchMed()">بحث</button>
+    <div id="medRes"></div>
+  </div>
+</section><section id="telemed">
+  <h2 class="title">📡 الاستشارات العربية</h2>
+  <div class="grid">
+    <div class="card"><h3>Altibbi</h3><a class="btn" href="https://altibbi.com" target="_blank">زيارة</a></div>
+    <div class="card"><h3>Vezeeta</h3><a class="btn" href="https://vezeeta.com" target="_blank">زيارة</a></div>
+    <div class="card"><h3>طبي</h3><a class="btn" href="https://tabeeby.com" target="_blank">زيارة</a></div>
+  </div>
+</section><section id="ai">
+  <h2 class="title">🧠 GPT طبي مخصص</h2>
+  <div class="card">
+    <textarea id="symptoms" placeholder="اكتب الأعراض أو نتائج التحاليل..."></textarea>
+    <button class="btn" onclick="gptMedical()">تحليل GPT</button>
+    <div id="aiRes"></div>
+    <div class="warn">⚠️ هذا تحليل مساعد وليس تشخيص نهائي</div>
+  </div>
+</section><section id="labs">
+  <h2 class="title">🔬 المختبرات</h2>
+  <div class="card">
+    <h3>رفع نتيجة تحليل</h3>
+    <input type="file" id="labFile">
+    <button class="btn" onclick="sendLabToGPT()">تحليل</button>
+    <div id="labRes"></div>
+  </div>
+</section><section id="admin">
+  <h2 class="title">⚙️ لوحة التحكم</h2>
+  <div class="card">
+    <input id="name" placeholder="اسم المنشأة">
+    <input id="type" placeholder="نوع (مستشفى / مختبر / طبيب)">
+    <input id="lat" placeholder="خط العرض">
+    <input id="lng" placeholder="خط الطول">
+    <button class="btn" onclick="addEntity()">إضافة</button>
+    <div id="list"></div>
+  </div>
+</section><section id="map-section">
+  <h2 class="title">🗺️ الخريطة الذكية</h2>
+  <div id="mapCanvas"></div>
+</section><footer>
+  ميديمن برو 🇾🇪 | مؤسس: د. علي زيد الغشمي | 771441367
+</footer><script src="https://unpkg.com/leaflet/dist/leaflet.js"></script><script>
 
-<div id="mapSection" class="section">
-<h3>🗺️ الخريطة</h3>
-<div id="map"></div>
-</div>
+let db = JSON.parse(localStorage.getItem('db')||'[]');
+let donors = JSON.parse(localStorage.getItem('donors')||'[]');
 
-<div id="hospitals" class="section"><div id="hospitalList" class="grid"></div></div>
-<div id="doctors" class="section"><div id="doctorList" class="grid"></div></div>
-<div id="pharmacies" class="section"><div id="pharmacyList" class="grid"></div></div>
-<div id="labs" class="section"><div id="labList" class="grid"></div></div>
-<div id="blood" class="section"><div id="bloodList" class="grid"></div></div>
-
-</div>
-
-<div class="footer">📱 جاهز للتحويل إلى APK عبر Capacitor أو Cordova</div>
-
-<script>
-const firebaseConfig={apiKey:"YOUR_API_KEY",databaseURL:"YOUR_DB_URL"};
-firebase.initializeApp(firebaseConfig);
-const db=firebase.database();
-
-let map,markers=[];
-
-function initMap(){
-map=L.map('map').setView([20,0],2);
+let map = L.map('mapCanvas').setView([15.369,44.191],7);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+function render(){
+  db.forEach(d=>L.marker([d.lat,d.lng]).addTo(map).bindPopup(d.name));
+  document.getElementById('list').innerHTML=db.map(x=>`<p>${x.name} - ${x.type}</p>`).join('');
+}
+render();
+
+function book(){
+  let msg=`حجز موعد%0A${pname.value}%0A${hospital.value}%0A${spec.value}%0A${date.value} ${time.value}`;
+  window.open(`https://wa.me/967771441367?text=${msg}`,'_blank');
 }
 
-function addMarker(lat,lng,name){markers.push(L.marker([lat,lng]).addTo(map).bindPopup(name));}
-
-function load(){
-
-db.ref('hospitals').on('value',s=>{
-let d=Object.values(s.val()||{});
-hospitalList.innerHTML=d.map(i=>`<div class='card'><div class='title'>${i.name}</div></div>`).join('');
-markers.forEach(m=>map.removeLayer(m));markers=[];
-d.forEach(i=>i.lat&&i.lng?addMarker(i.lat,i.lng,i.name):0);
-});
-
-['doctors','pharmacies','labs','blood'].forEach(t=>{
-let el=document.getElementById(t+'List');
-db.ref(t).on('value',s=>{
-el.innerHTML=Object.values(s.val()||{}).map(i=>`<div class='card'><div class='title'>${i.name}</div></div>`).join('');
-});
-});
-
+function addDonor(){
+  donors.push({name:dname.value,type:dtype.value,phone:dphone.value});
+  localStorage.setItem('donors',JSON.stringify(donors));
+  alert('تم التسجيل');
 }
 
-function addHospital(){db.ref('hospitals').push({name:hName.value,lat:+hLat.value,lng:+hLng.value});}
-function addDoctor(){db.ref('doctors').push({name:dName.value,spec:dSpec.value});}
-function addPharmacy(){db.ref('pharmacies').push({name:pName.value});}
-function addLab(){db.ref('labs').push({name:lName.value});}
-function addBlood(){db.ref('blood').push({name:bName.value,type:bType.value});}
+function requestBlood(){
+  let f=donors.find(x=>x.type==need.value);
+  if(!f)return alert('لا يوجد متبرعين');
+  window.open(`https://wa.me/${f.phone}?text=طلب دم عاجل`);
+}
 
-function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function searchMed(){
+  let m={"بنادول":"1500","باراسيتامول":"1000"};
+  medRes.innerHTML=m[med.value]?`السعر ${m[med.value]}`:'غير موجود';
+}
 
-setTimeout(()=>{initMap();load();},600);
-</script>
+async function gptMedical(){
+  let symptoms=document.getElementById('symptoms').value;
+  let res=document.getElementById('aiRes');
+  res.innerHTML="جاري التحليل...";
 
-</body>
+  try{
+    let r=await fetch('/api/gpt-medical',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({input:symptoms})});
+    let d=await r.json();
+    res.innerHTML=d.result;
+  }catch(e){res.innerHTML='تعذر الاتصال بالخادم';}
+}
+
+async function sendLabToGPT(){
+  let file=labFile.files[0];
+  if(!file)return alert('اختر ملف');
+
+  let form=new FormData();
+  form.append('file',file);
+
+  let r=await fetch('/api/lab-analysis',{method:'POST',body:form});
+  let d=await r.json();
+
+  labRes.innerHTML=d.result;
+}
+
+function addEntity(){
+  let o={name:name.value,type:type.value,lat:+lat.value,lng:+lng.value};
+  db.push(o);
+  localStorage.setItem('db',JSON.stringify(db));
+  L.marker([o.lat,o.lng]).addTo(map).bindPopup(o.name);
+  render();
+}
+
+</script></body>
 </html>
