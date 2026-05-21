@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,304 +10,266 @@
       font-family: Arial, sans-serif;
       background: #f5f5f5;
       color: #222;
-    }
-    .hero {
-      background: #1b5e20;
-      color: white;
-      padding: 60px 20px;
-      text-align: center;
-    }
-    .hero h1 {
-      font-size: 50px;
-      margin-bottom: 20px;
-    }
-    .hero p {
-      font-size: 22px;
-      max-width: 800px;
-      margin: auto;
-    }
-    .btn {
-      display: inline-block;
-      margin-top: 25px;
-      background: white;
-      color: #1b5e20;
-      padding: 14px 30px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-    }
-    .btn-danger {
-      background: #d32f2f;
-      color: white;
-      padding: 8px 15px;
-      font-size: 14px;
-      margin-top: 10px;
-    }
-    .section {
-      padding: 60px 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .section-title {
-      text-align: center;
-      font-size: 36px;
-      color: #1b5e20;
-      margin-bottom: 40px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      text-align: center;
-      position: relative;
-    }
-    .card h3 {
-      color: #1b5e20;
-      margin-top: 15px;
-    }
-    .invest {
-      background: #e8f5e9;
-      border-radius: 20px;
-      padding: 30px;
-      margin-top: 30px;
-    }
-    footer {
-      background: #1b5e20;
-      color: white;
-      text-align: center;
-      padding: 30px 20px;
-      margin-top: 40px;
-    }
-    /* لوحة التحكم */
-    .admin-panel {
-      background: #fff3e0;
-      border: 2px dashed #ff9800;
-      border-radius: 20px;
-      padding: 25px;
-      margin-bottom: 30px;
-    }
-    .admin-panel input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-    .admin-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
+    }.hero {
+  background: #1b5e20;
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 22px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 25px;
+  background: white;
+  color: #1b5e20;
+  padding: 14px 30px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.section {
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 36px;
+  color: #1b5e20;
+  margin-bottom: 40px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.card h3 {
+  color: #1b5e20;
+  margin-top: 15px;
+}
+
+.invest {
+  background: #e8f5e9;
+  border-radius: 20px;
+  padding: 30px;
+  margin-top: 30px;
+}
+
+footer {
+  background: #1b5e20;
+  color: white;
+  text-align: center;
+  padding: 30px 20px;
+  margin-top: 40px;
+}
+
   </style>
 </head>
-<body>
-
-  <section class="hero">
+<body>  <section class="hero">
     <h1>MedYemen</h1>
-    <p>منصة طبية رقمية متكاملة تربط المرضى بالخدمات الصحية في مكان واحد</p>
-    <a href="#contact" class="btn">طلب عرض استثماري</a>
-  </section>
+    <p>
+      منصة طبية رقمية متكاملة تربط المرضى بالخدمات الصحية في مكان واحد
+    </p><a href="#contact" class="btn">طلب عرض استثماري</a>
 
-  <section class="section">
-    <h2 class="section-title">خدمات المنصة</h2>
-    <div style="text-align:center;margin-bottom:30px;">
-      <input type="text" placeholder="ابحث عن مستشفى أو صيدلية أو دواء" style="width:80%;max-width:600px;padding:15px;border-radius:12px;border:1px solid #ccc;font-size:18px;">
-    </div>
-    <div class="grid">
-      <div class="card">
-        <div style="font-size:50px">🗺️</div>
-        <h3>الخريطة الطبية</h3>
-        <p>الوصول السريع للمستشفيات والعيادات والصيدليات</p>
-      </div>
-      <div class="card">
-        <div style="font-size:50px">💊</div>
-        <h3>الأدوية</h3>
-        <p>توفر الأدوية والبدائل والأسعار</p>
-      </div>
-      <div class="card">
-        <div style="font-size:50px">🩸</div>
-        <h3>بنوك الدم</h3>
-        <p>البحث عن الفصائل والمتبرعين</p>
-      </div>
-      <div class="card">
-        <div style="font-size:50px">👨‍⚕️</div>
-        <h3>الاستشارات الطبية</h3>
-        <p>استشارات طبية محلية ودولية</p>
-      </div>
-    </div>
-  </section>
+  </section>  <section class="section">
+    <h2 class="section-title">خدمات المنصة</h2><div style="text-align:center;margin-bottom:30px;">
+  <input type="text" placeholder="ابحث عن مستشفى أو صيدلية أو دواء" style="width:80%;max-width:600px;padding:15px;border-radius:12px;border:1px solid #ccc;font-size:18px;">
+</div>
 
-  <section class="section">
-    <h2 class="section-title">الخريطة الطبية</h2>
-    <div style="background:white;border-radius:20px;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,0.1);margin-bottom:50px;">
-      <iframe src="https://maps.google.com/maps?q=sanaa&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="400" style="border:0;border-radius:20px;" allowfullscreen loading="lazy"></iframe>
-    </div>
+<div class="grid">
+  <div class="card">
+    <div style="font-size:50px">🗺️</div>
+    <h3>الخريطة الطبية</h3>
+    <p>الوصول السريع للمستشفيات والعيادات والصيدليات</p>
+  </div>
 
-    <h2 class="section-title">الأدوية والبدائل</h2>
-    <div class="grid">
-      <div class="card"><h3>Panadol</h3><p>متوفر في عدة صيدليات</p><p><strong>السعر:</strong> 3$</p></div>
-      <div class="card"><h3>Augmentin</h3><p>البديل: Amoxicillin</p><p><strong>السعر:</strong> 8$</p></div>
-    </div>
+  <div class="card">
+    <div style="font-size:50px">💊</div>
+    <h3>الأدوية</h3>
+    <p>توفر الأدوية والبدائل والأسعار</p>
+  </div>
 
-    <h2 class="section-title" style="margin-top:60px;">بنوك الدم</h2>
-    <div class="grid">
-      <div class="card"><h3>فصيلة O+</h3><p>متوفرة حالياً</p></div>
-      <div class="card"><h3>فصيلة A-</h3><p>مطلوبة بشكل عاجل</p></div>
-    </div>
+  <div class="card">
+    <div style="font-size:50px">🩸</div>
+    <h3>بنوك الدم</h3>
+    <p>البحث عن الفصائل والمتبرعين</p>
+  </div>
 
-    <h2 class="section-title" style="margin-top:60px;">الاستشارات الطبية</h2>
-    <div class="invest">
-      <p>✔ إرسال استشارة طبية</p>
-      <p>✔ رفع صورة أو فحص طبي</p>
-      <p>✔ التواصل مع أطباء محليين ودوليين</p>
-      <a href="https://wa.me/967771441367" class="btn">تواصل عبر واتساب</a>
-    </div>
+  <div class="card">
+    <div style="font-size:50px">👨‍⚕️</div>
+    <h3>الاستشارات الطبية</h3>
+    <p>استشارات طبية محلية ودولية</p>
+  </div>
+</div>
 
-    <h2 class="section-title" style="margin-top:60px;">لماذا سيستثمرون في MedYemen؟</h2>
-    <div class="invest">
-      <p>✔ أول منصة صحية رقمية متكاملة محلياً</p>
-      <p>✔ نموذج ربحي واضح وقابل للنمو</p>
-      <p>✔ سوق صحي كبير وغير مشبع رقمياً</p>
-      <p>✔ دخل متكرر من الاشتراكات والخدمات</p>
-      <p>✔ قابلية توسع محلية وإقليمية</p>
-    </div>
-  </section>
+  </section>  <section class="section">
+    <h2 class="section-title">الخريطة الطبية</h2><div style="background:white;border-radius:20px;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,0.1);margin-bottom:50px;">
+  <iframe
+    src="https://maps.google.com/maps?q=sanaa&t=&z=13&ie=UTF8&iwloc=&output=embed"
+    width="100%"
+    height="400"
+    style="border:0;border-radius:20px;"
+    allowfullscreen=""
+    loading="lazy">
+  </iframe>
+</div>
 
-  <section class="section">
-    <h2 class="section-title">المؤشرات المالية المتوقعة</h2>
-    <div class="grid">
-      <div class="card"><h3>السنة الأولى</h3><p>50K – 150K دولار</p></div>
-      <div class="card"><h3>السنة الثانية</h3><p>300K – 900K دولار</p></div>
-      <div class="card"><h3>السنة الثالثة</h3><p>1M – 3M+ دولار</p></div>
-    </div>
-  </section>
+<h2 class="section-title">الأدوية والبدائل</h2>
 
-  <section class="section">
-    <h2 class="section-title">المنشآت الطبية المضافة حديثاً</h2>
-    
-    <!-- لوحة التحكم -->
-    <div class="admin-panel">
-      <div class="admin-header">
-        <h3 style="margin:0;color:#e65100;">لوحة التحكم - إضافة منشأة جديدة</h3>
-        <button class="btn" onclick="toggleAdmin()">إخفاء/إظهار</button>
-      </div>
-      <div id="adminForm">
-        <input type="text" id="facilityName" placeholder="اسم المنشأة">
-        <input type="text" id="facilityLocation" placeholder="الموقع">
-        <input type="text" id="facilityPhone" placeholder="رقم الهاتف">
-        <button class="btn" onclick="addFacility()">إضافة المنشأة</button>
-      </div>
-    </div>
+<div class="grid">
+  <div class="card">
+    <h3>Panadol</h3>
+    <p>متوفر في عدة صيدليات</p>
+    <p><strong>السعر:</strong> 3$</p>
+  </div>
 
-    <!-- الكروت بتتولد هنا بالجافاسكربت -->
-    <div class="grid" id="facilitiesGrid"></div>
-  </section>
+  <div class="card">
+    <h3>Augmentin</h3>
+    <p>البديل: Amoxicillin</p>
+    <p><strong>السعر:</strong> 8$</p>
+  </div>
+</div>
 
-  <section class="section">
-    <h2 class="section-title">إحصائيات المنصة</h2>
-    <div class="grid">
-      <div class="card"><div style="font-size:40px;font-weight:bold;color:#1b5e20">150+</div><p>منشأة طبية</p></div>
-      <div class="card"><div style="font-size:40px;font-weight:bold;color:#1b5e20">5K+</div><p>مستخدم شهري</p></div>
-      <div class="card"><div style="font-size:40px;font-weight:bold;color:#1b5e20">1K+</div><p>بحث عن أدوية</p></div>
-      <div class="card"><div style="font-size:40px;font-weight:bold;color:#1b5e20">300+</div><p>استشارة طبية</p></div>
-    </div>
-  </section>
+<h2 class="section-title" style="margin-top:60px;">بنوك الدم</h2>
 
-  <section class="section">
-    <h2 class="section-title">انضم إلى MedYemen</h2>
-    <div class="invest">
-      <form>
-        <input type="text" placeholder="الاسم" style="width:100%;padding:15px;margin-bottom:15px;border-radius:10px;border:1px solid #ccc;">
-        <input type="text" placeholder="رقم الهاتف" style="width:100%;padding:15px;margin-bottom:15px;border-radius:10px;border:1px solid #ccc;">
-        <input type="text" placeholder="نوع المنشأة أو الخدمة" style="width:100%;padding:15px;margin-bottom:15px;border-radius:10px;border:1px solid #ccc;">
-        <textarea placeholder="ملاحظات" style="width:100%;padding:15px;height:120px;border-radius:10px;border:1px solid #ccc;"></textarea>
-        <br><br>
-        <button class="btn" type="submit">إرسال الطلب</button>
-      </form>
-    </div>
-  </section>
+<div class="grid">
+  <div class="card">
+    <h3>فصيلة O+</h3>
+    <p>متوفرة حالياً</p>
+  </div>
 
-  <footer id="contact">
+  <div class="card">
+    <h3>فصيلة A-</h3>
+    <p>مطلوبة بشكل عاجل</p>
+  </div>
+</div>
+
+<h2 class="section-title" style="margin-top:60px;">الاستشارات الطبية</h2>
+
+<div class="invest">
+  <p>✔ إرسال استشارة طبية</p>
+  <p>✔ رفع صورة أو فحص طبي</p>
+  <p>✔ التواصل مع أطباء محليين ودوليين</p>
+  <a href="https://wa.me/967771441367" class="btn">تواصل عبر واتساب</a>
+</div>
+
+<h2 class="section-title" style="margin-top:60px;">لماذا سيستثمرون في MedYemen؟</h2>
+
+<div class="invest">
+  <p>✔ أول منصة صحية رقمية متكاملة محلياً</p>
+  <p>✔ نموذج ربحي واضح وقابل للنمو</p>
+  <p>✔ سوق صحي كبير وغير مشبع رقمياً</p>
+  <p>✔ دخل متكرر من الاشتراكات والخدمات</p>
+  <p>✔ قابلية توسع محلية وإقليمية</p>
+</div>
+
+  </section>  <section class="section">
+    <h2 class="section-title">المؤشرات المالية المتوقعة</h2><div class="grid">
+  <div class="card">
+    <h3>السنة الأولى</h3>
+    <p>50K – 150K دولار</p>
+  </div>
+
+  <div class="card">
+    <h3>السنة الثانية</h3>
+    <p>300K – 900K دولار</p>
+  </div>
+
+  <div class="card">
+    <h3>السنة الثالثة</h3>
+    <p>1M – 3M+ دولار</p>
+  </div>
+</div>
+
+  </section>  <section class="section">
+    <h2 class="section-title">المنشآت الطبية المضافة حديثاً</h2><div class="grid">
+  <div class="card">
+    <h3>مستشفى اليمن الدولي</h3>
+    <p>📍 صنعاء</p>
+    <p>📞 01-XXXXXX</p>
+    <a href="#" class="btn">عرض التفاصيل</a>
+  </div>
+
+  <div class="card">
+    <h3>صيدلية الشفاء</h3>
+    <p>📍 حدة</p>
+    <p>📞 77XXXXXXX</p>
+    <a href="#" class="btn">عرض التفاصيل</a>
+  </div>
+
+  <div class="card">
+    <h3>مختبر الحياة</h3>
+    <p>📍 شارع الزبيري</p>
+    <p>📞 01-XXXXXX</p>
+    <a href="#" class="btn">عرض التفاصيل</a>
+  </div>
+</div>
+
+  </section>  <section class="section">
+    <h2 class="section-title">إحصائيات المنصة</h2><div class="grid">
+  <div class="card">
+    <div style="font-size:40px;font-weight:bold;color:#1b5e20">150+</div>
+    <p>منشأة طبية</p>
+  </div>
+
+  <div class="card">
+    <div style="font-size:40px;font-weight:bold;color:#1b5e20">5K+</div>
+    <p>مستخدم شهري</p>
+  </div>
+
+  <div class="card">
+    <div style="font-size:40px;font-weight:bold;color:#1b5e20">1K+</div>
+    <p>بحث عن أدوية</p>
+  </div>
+
+  <div class="card">
+    <div style="font-size:40px;font-weight:bold;color:#1b5e20">300+</div>
+    <p>استشارة طبية</p>
+  </div>
+</div>
+
+  </section>  <section class="section">
+    <h2 class="section-title">انضم إلى MedYemen</h2><div class="invest">
+  <form>
+    <input type="text" placeholder="الاسم" style="width:100%;padding:15px;margin-bottom:15px;border-radius:10px;border:1px solid #ccc;">
+
+    <input type="text" placeholder="رقم الهاتف" style="width:100%;padding:15px;margin-bottom:15px;border-radius:10px;border:1px solid #ccc;">
+
+    <input type="text" placeholder="نوع المنشأة أو الخدمة" style="width:100%;padding:15px;margin-bottom:15px;border-radius:10px;border:1px solid #ccc;">
+
+    <textarea placeholder="ملاحظات" style="width:100%;padding:15px;height:120px;border-radius:10px;border:1px solid #ccc;"></textarea>
+
+    <br><br>
+    <button class="btn" type="submit">إرسال الطلب</button>
+  </form>
+</div>
+
+  </section>  <footer id="contact">
     <h2>MedYemen</h2>
     <p>منصة صحية رقمية متكاملة</p>
     <p>د. علي زيد الغشمي | 771441367</p>
-  </footer>
-
-<script>
-// البيانات بتتخزن هنا
-let facilities = JSON.parse(localStorage.getItem('facilities')) || [
-  {name: "مستشفى اليمن الدولي", location: "صنعاء", phone: "01-XXXXXX"},
-  {name: "صيدلية الشفاء", location: "حدة", phone: "77XXXXXXX"},
-  {name: "مختبر الحياة", location: "شارع الزبيري", phone: "01-XXXXXX"}
-];
-
-// عرض المنشآت
-function renderFacilities() {
-  const grid = document.getElementById('facilitiesGrid');
-  grid.innerHTML = '';
-  
-  facilities.forEach((facility, index) => {
-    grid.innerHTML += `
-      <div class="card">
-        <h3>${facility.name}</h3>
-        <p>📍 ${facility.location}</p>
-        <p>📞 ${facility.phone}</p>
-        <button class="btn btn-danger" onclick="deleteFacility(${index})">حذف</button>
-      </div>
-    `;
-  });
-}
-
-// إضافة منشأة جديدة
-function addFacility() {
-  const name = document.getElementById('facilityName').value;
-  const location = document.getElementById('facilityLocation').value;
-  const phone = document.getElementById('facilityPhone').value;
-
-  if (!name || !location || !phone) {
-    alert('املأ جميع الحقول');
-    return;
-  }
-
-  facilities.push({name, location, phone});
-  localStorage.setItem('facilities', JSON.stringify(facilities));
-  
-  // تنظيف الحقول
-  document.getElementById('facilityName').value = '';
-  document.getElementById('facilityLocation').value = '';
-  document.getElementById('facilityPhone').value = '';
-  
-  renderFacilities();
-}
-
-// حذف منشأة
-function deleteFacility(index) {
-  if (confirm('متأكد تريد حذف هذه المنشأة؟')) {
-    facilities.splice(index, 1);
-    localStorage.setItem('facilities', JSON.stringify(facilities));
-    renderFacilities();
-  }
-}
-
-// إخفاء وإظهار لوحة التحكم
-function toggleAdmin() {
-  const form = document.getElementById('adminForm');
-  form.style.display = form.style.display === 'none' ? 'block' : 'none';
-}
-
-// شغّل العرض أول ما تفتح الصفحة
-renderFacilities();
-</script>
-
-</body>
+  </footer></body>
 </html>
