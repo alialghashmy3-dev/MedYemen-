@@ -1,297 +1,367 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>منصة صحية V4</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediYemen Pro</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
-<style>
-body{margin:0;font-family:Tajawal;background:#f5f7fb}
-#map{height:45vh}
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
 
-.container{padding:10px}
-.card{background:#fff;padding:15px;margin:10px 0;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+    body {
+      background: #f3f5f8;
+      color: #222;
+    }
 
-input,select,textarea{width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;font-size:16px}
+    .hero {
+      background: linear-gradient(135deg, #007c86, #2bb34a);
+      color: white;
+      text-align: center;
+      padding: 55px 20px 45px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
 
-button{
-  width:100%;padding:12px;
-  background:#1565c0;color:#fff;
-  border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:16px
-}
-button:hover{background:#0d47a1}
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
 
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .hero p {
+      font-size: 18px;
+      line-height: 1.9;
+      opacity: 0.95;
+    }
 
-.tab{display:none}
-.active{display:block}
+    .welcome {
+      background: white;
+      margin: 18px;
+      padding: 16px;
+      border-radius: 18px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+    }
 
-.small{font-size:12px;color:#666}
-.hidden{display:none}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-</style>
+    .notice {
+      margin: 18px;
+      background: #0f7d8d;
+      color: white;
+      padding: 18px;
+      border-radius: 16px;
+      text-align: center;
+      line-height: 1.9;
+      font-size: 17px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .search-box {
+      margin: 20px 18px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 18px;
+      border: 1px solid #ddd;
+      border-radius: 18px;
+      font-size: 17px;
+      outline: none;
+      background: white;
+    }
+
+    .filters {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .filters select {
+      flex: 1;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid #ddd;
+      background: white;
+      font-size: 16px;
+      color: #666;
+    }
+
+    .stats {
+      padding: 12px 18px 50px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 50px 20px;
+      margin-bottom: 25px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    }
+
+    .card h2 {
+      font-size: 58px;
+      color: #0a8092;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .card p {
+      font-size: 24px;
+      color: #555;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 42px;
+      font-weight: 800;
+      color: #0a8092;
+      margin-top: 10px;
+      margin-bottom: 25px;
+    }
+
+    .facility {
+      background: white;
+      border-radius: 24px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .facility h3 {
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: #0f7d8d;
+    }
+
+    .facility p {
+      color: #666;
+      line-height: 1.8;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 15px;
+      background: linear-gradient(135deg, #007c86, #2bb34a);
+      color: white;
+      text-decoration: none;
+      padding: 12px 22px;
+      border-radius: 14px;
+      font-weight: 700;
+    }
+
+    footer {
+      background: #0a8092;
+      color: white;
+      text-align: center;
+      padding: 25px 15px;
+      margin-top: 40px;
+      font-size: 15px;
+    }
+
+    @media(max-width: 600px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .card h2 {
+        font-size: 48px;
+      }
+
+      .card p {
+        font-size: 20px;
+      }
+
+      .section-title {
+        font-size: 34px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div id="map"></div>
+  <section class="hero">
+    <h1>🇾🇪 MediYemen Pro</h1>
+    <p>
+      الدليل الطبي اليمني الشامل للمستشفيات والعيادات<br>
+      والأطباء والاستشارات الطبية
+    </p>
+  </section>
 
-<div class="container">
-
-<!-- LOGIN -->
-<div id="loginBox" class="card">
-  <h3>تسجيل الدخول</h3>
-  <input id="email" placeholder="الإيميل" type="email">
-  <input id="password" type="password" placeholder="كلمة المرور">
-  <button onclick="login()">دخول</button>
-  <p class="small">ملاحظة: لازم تنشئ مستخدم من Supabase > Authentication > Users > Add user</p>
-</div>
-
-<!-- APP -->
-<div id="appBox" class="hidden">
-  <div class="card header">
-    <h3>مرحباً <span id="userEmail"></span></h3>
-    <button onclick="logout()" style="width:auto;background:#c62828;padding:8px 15px">خروج</button>
+  <div class="welcome">
+    🚑 مرحباً بكم في MediYemen Pro — أكبر دليل طبي يمني
   </div>
 
-  <!-- NAV -->
-  <div class="card">
-    <div class="row">
-      <button onclick="show('fac')">🏥 المنشآت</button>
-      <button onclick="show('blood')">🩸 بنك الدم</button>
+  <div class="notice">
+    📍 الخرائط التفاعلية والحجز الإلكتروني وإضافة المنشآت
+    أصبحت متاحة الآن داخل المنصة.
+  </div>
+
+  <div class="search-box">
+    <input type="text" placeholder="ابحث عن مستشفى أو طبيب أو خدمة...">
+
+    <div class="filters">
+      <select>
+        <option>جميع التصنيفات</option>
+        <option>مستشفيات</option>
+        <option>عيادات</option>
+        <option>صيدليات</option>
+        <option>مختبرات</option>
+      </select>
+
+      <select>
+        <option>كل المحافظات</option>
+        <option>صنعاء</option>
+        <option>تعز</option>
+        <option>عدن</option>
+        <option>إب</option>
+      </select>
     </div>
-    <div class="row">
-      <button onclick="show('chat')">💬 الاستشارات</button>
-      <button onclick="show('ai')">🤖 المساعد AI</button>
+  </div>
+
+  <section class="stats">
+
+    <div class="card">
+      <h2>+250</h2>
+      <p>منشأة صحية</p>
     </div>
-  </div>
 
-  <!-- FACILITIES -->
-  <div id="fac" class="tab active card">
-    <h3>إضافة منشأة على الخريطة</h3>
-    <input id="name" placeholder="اسم المنشأة">
-    <input id="type" placeholder="نوع: مستشفى، صيدلية، مركز صحي">
-    <div class="row">
-      <input id="lat" placeholder="خط العرض lat" type="number" step="0.0001">
-      <input id="lng" placeholder="خط الطول lng" type="number" step="0.0001">
+    <div class="card">
+      <h2>+80</h2>
+      <p>صيدلية ومختبر</p>
     </div>
-    <button onclick="addFacility()">إضافة</button>
-    <p class="small">إحداثيات صنعاء: lat=15.3694, lng=44.1910</p>
-  </div>
 
-  <!-- BLOOD -->
-  <div id="blood" class="tab card">
-    <h3>طلب دم عاجل</h3>
-    <input id="bname" placeholder="اسم المريض">
-    <input id="btype" placeholder="فصيلة الدم: A+, O-, B+">
-    <input id="bcity" placeholder="المدينة">
-    <input id="bphone" placeholder="رقم التواصل">
-    <button onclick="addBlood()">إرسال الطلب</button>
-    <hr>
-    <h4>الطلبات المفتوحة</h4>
-    <div id="bloodList"></div>
-  </div>
+    <div class="card">
+      <h2>+20</h2>
+      <p>بنك دم</p>
+    </div>
 
-  <!-- CHAT -->
-  <div id="chat" class="tab card">
-    <h3>استشارة طبيب</h3>
-    <textarea id="msg" placeholder="اكتب حالتك أو سؤالك..." rows="3"></textarea>
-    <button onclick="sendMsg()">إرسال</button>
-    <hr>
-    <div id="chatBox"></div>
-  </div>
+    <div class="card">
+      <h2>24/7</h2>
+      <p>استشارات طبية</p>
+    </div>
 
-  <!-- AI -->
-  <div id="ai" class="tab card">
-    <h3>المساعد الطبي الذكي</h3>
-    <textarea id="q" placeholder="اسأل عن الأعراض أو الدواء..." rows="3"></textarea>
-    <button onclick="askAI()">اسأل الذكاء الاصطناعي</button>
-    <div id="aiRes" style="margin-top:10px"></div>
-  </div>
-</div>
+    <h2 class="section-title">🏥 الدليل الطبي</h2>
 
-</div>
+    <div class="facility">
+      <h3>مستشفى اليمن الدولي</h3>
+      <p>
+        خدمات طبية متكاملة، طوارئ، عناية مركزة، مختبرات، وعمليات جراحية.
+      </p>
+      <a href="#" class="btn">عرض التفاصيل</a>
+    </div>
 
-<script>
-// 🔑 مفاتيح Supabase - جاهزة
-const SUPABASE_URL = "https://vizedzonczytlswvcecm.supabase.co"
-const SUPABASE_KEY = "sb_publishable_IHI2w7i_mEwCeX_8d-R7pw_Axf30Cp0"
+    <div class="facility">
+      <h3>مختبرات ميديكال الحديثة</h3>
+      <p>
+        تحاليل طبية دقيقة مع خدمة إرسال النتائج إلكترونياً.
+      </p>
+      <a href="#" class="btn">عرض التفاصيل</a>
+    </div>
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <div class="facility">
+      <h3>صيدلية الشفاء</h3>
+      <p>
+        توفر الأدوية والمستلزمات الطبية وخدمة التوصيل السريع.
+      </p>
+      <a href="#" class="btn">عرض التفاصيل</a>
+    </div>
 
-/* MAP */
-const map = L.map('map').setView([15.3694,44.1910],12);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-let markers=[];
+  </section>
 
-/* CHECK LOGIN ON START */
-checkSession();
+  <footer>
+    جميع الحقوق محفوظة © MediYemen Pro 2026<br><br>
+    المؤسس: د. علي زيد الغشمي<br>
+    رقم التواصل: 771441367
+  </footer>
 
-async function checkSession() {
-  const { data: { session } = await supabase.auth.getSession();
-  
-  if (session) {
-    document.getElementById('loginBox').classList.add('hidden');
-    document.getElementById('appBox').classList.remove('hidden');
-    document.getElementById('userEmail').innerText = session.user.email;
-    initApp();
-  } else {
-    document.getElementById('loginBox').classList.remove('hidden');
-    document.getElementById('appBox').classList.add('hidden');
-  }
-}
+  <section class="stats">
 
-/* LOGIN */
-async function login(){
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: email.value,
-    password: password.value
-  });
-  
-  if (error) {
-    alert("خطأ في الدخول: " + error.message);
-    return;
-  }
-  
-  checkSession();
-}
+    <h2 class="section-title">👨‍⚕️ الأطباء المتخصصون</h2>
 
-/* LOGOUT */
-async function logout(){
-  await supabase.auth.signOut();
-  location.reload();
-}
+    <div class="facility">
+      <h3>د. أحمد السامعي — أخصائي قلب</h3>
+      <p>
+        خبرة أكثر من 15 سنة في أمراض القلب والقسطرة القلبية.
+      </p>
+      <a href="#" class="btn">حجز موعد</a>
+    </div>
 
-/* INIT APP */
-function initApp(){
-  loadFacilities();
-  loadBlood();
-  loadChat();
-  
-  setInterval(()=>{
-    loadBlood();
-    loadChat();
-  },5000);
-}
+    <div class="facility">
+      <h3>د. محمد العبسي — أخصائي أطفال</h3>
+      <p>
+        متابعة الأطفال وحديثي الولادة والاستشارات الطبية.
+      </p>
+      <a href="#" class="btn">حجز موعد</a>
+    </div>
 
-/* NAV */
-function show(id){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
+  </section>
 
-/* FACILITIES */
-async function addFacility(){
-  if(!name.value || !lat.value || !lng.value) return alert('عبي كل الحقول');
-  
-  const {error} = await supabase.from('facilities').insert([{
-    name: name.value,
-    type: type.value,
-    lat: Number(lat.value),
-    lng: Number(lng.value)
-  }]);
-  
-  if(error) return alert('خطأ: ' + error.message);
-  
-  name.value = type.value = lat.value = lng.value = '';
-  loadFacilities();
-  alert("تمت إضافة المنشأة");
-}
+  <section class="stats">
+    <h2 class="section-title">⚙️ لوحة التحكم</h2>
 
-async function loadFacilities(){
-  const {data, error} = await supabase.from('facilities').select('*');
-  if(error) return;
+    <div class="facility">
+      <h3>إضافة منشأة جديدة</h3>
 
-  markers.forEach(m=>map.removeLayer(m));
-  markers=[];
+      <form id="facilityForm">
+        <input type="text" id="name" placeholder="اسم المنشأة" required style="width:100%;padding:15px;margin-bottom:12px;border-radius:14px;border:1px solid #ddd;">
 
-  data.forEach(f=>{
-    if(f.lat && f.lng) {
-      const m = L.marker([f.lat,f.lng]).addTo(map).bindPopup(`<b>${f.name}</b><br>${f.type || ''}`);
-      markers.push(m);
-    }
-  });
-}
+        <input type="text" id="type" placeholder="نوع المنشأة" required style="width:100%;padding:15px;margin-bottom:12px;border-radius:14px;border:1px solid #ddd;">
 
-/* BLOOD */
-async function addBlood(){
-  if(!bname.value || !btype.value || !bphone.value) return alert('عبي الحقول المهمة');
-  
-  const {error} = await supabase.from('blood_requests').insert([{
-    name: bname.value,
-    blood_type: btype.value,
-    city: bcity.value,
-    phone: bphone.value,
-    status: 'open'
-  }]);
-  
-  if(error) return alert('خطأ: ' + error.message);
-  
-  bname.value = btype.value = bcity.value = bphone.value = '';
-  loadBlood();
-  alert("تم إرسال طلب الدم");
-}
+        <input type="text" id="city" placeholder="المحافظة" required style="width:100%;padding:15px;margin-bottom:12px;border-radius:14px;border:1px solid #ddd;">
 
-async function loadBlood(){
-  const {data} = await supabase.from('blood_requests')
-    .select('*').eq('status','open').order('created_at',{ascending:false});
+        <textarea id="desc" placeholder="وصف المنشأة" required style="width:100%;padding:15px;margin-bottom:12px;border-radius:14px;border:1px solid #ddd;height:120px;"></textarea>
 
-  bloodList.innerHTML = data && data.length > 0 ? data.map(b=>
-    `<div style="border-bottom:1px solid #eee;padding:8px 0">
-      🩸 <b>${b.blood_type}</b> - ${b.name}<br>
-      <span class="small">${b.city || 'غير محدد'} | ${b.phone}</span>
-    </div>`
-  ).join('') : '<p class="small">لا توجد طلبات مفتوحة</p>';
-}
+        <button type="submit" class="btn" style="border:none;cursor:pointer;">
+          ➕ إضافة المنشأة
+        </button>
+      </form>
+    </div>
 
-/* CHAT */
-async function sendMsg(){
-  if(!msg.value.trim()) return alert('اكتب سؤالك أول');
-  
-  const {error} = await supabase.from('consultations').insert([{
-    message: msg.value,
-    response: "بانتظار رد الطبيب..."
-  }]);
-  
-  if(error) return alert('خطأ: ' + error.message);
-  
-  msg.value = '';
-  loadChat();
-}
+    <div id="facilitiesContainer"></div>
+  </section>
 
-async function loadChat(){
-  const {data} = await supabase.from('consultations')
-    .select('*').order('created_at',{ascending:false}).limit(20);
+  <script>
+    const form = document.getElementById('facilityForm');
+    const container = document.getElementById('facilitiesContainer');
 
-  chatBox.innerHTML = data && data.length > 0 ? data.map(c=>
-    `<div style="margin:10px 0;padding:10px;background:#f8f9fa;border-radius:8px">
-      <b>👤 أنت:</b> ${c.message}<br>
-      <b>🤖 الرد:</b> ${c.response || '...' }
-    </div>`
-  ).join('') : '<p class="small">لا توجد استشارات بعد</p>';
-}
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
 
-/* AI */
-async function askAI(){
-  if(!q.value.trim()) return alert('اكتب سؤالك');
-  aiRes.innerHTML = "🧠 جاري التفكير...";
+      const name = document.getElementById('name').value;
+      const type = document.getElementById('type').value;
+      const city = document.getElementById('city').value;
+      const desc = document.getElementById('desc').value;
 
-  setTimeout(()=>{
-    aiRes.innerHTML = `
-      <div style="background:#e3f2fd;padding:12px;border-radius:8px">
-        <b>تحليل أولي:</b> بناءً على وصفك للأعراض.<br>
-        <b>نصيحة:</b> راقب حالتك. إذا استمرت الأعراض أكثر من 48 ساعة أو زادت حدتها، راجع أقرب مركز صحي فوراً.<br>
-        <span class="small">* تنبيه: هذا رد آلي وليس تشخيص طبي معتمد</span>
-      </div>
-    `;
-  },1200);
-  q.value = '';
-}
-</script>
+      const card = document.createElement('div');
+      card.className = 'facility';
+
+      card.innerHTML = `
+        <h3>${name}</h3>
+        <p><strong>النوع:</strong> ${type}</p>
+        <p><strong>المحافظة:</strong> ${city}</p>
+        <p>${desc}</p>
+        <a href="#" class="btn">عرض التفاصيل</a>
+      `;
+
+      container.prepend(card);
+
+      form.reset();
+    });
+  </script>
 
 </body>
 </html>
